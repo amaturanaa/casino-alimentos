@@ -1,10 +1,10 @@
-package com.casino;
+package com.casino.eurekaserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CasinoAlimentosApplicationTests {
+class EurekaServerApplicationTests {
 
     @Test
     void contextLoads() {
