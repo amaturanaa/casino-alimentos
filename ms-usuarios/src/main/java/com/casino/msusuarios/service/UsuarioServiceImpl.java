@@ -24,18 +24,18 @@ public class UsuarioServiceImpl implements UsuarioService {
     public UsuarioResponseDTO crearUsuario(UsuarioRequestDTO dto) {
         if (usuarioRepository.existsByEmail(dto.getEmail()))
             throw new RuntimeException("El email ya está registrado");
-        if (usuarioRepository.existsByRut_usuario(dto.getRut_usuario()))
+        if (usuarioRepository.existsByRutUsuario(dto.getRut_usuario()))
             throw new RuntimeException("El RUT ya está registrado");
 
         Rol rol = rolRepository.findById(dto.getRol_id())
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
         Usuario usuario = new Usuario();
-        usuario.setRut_usuario(dto.getRut_usuario());
-        usuario.setPnombre_usuario(dto.getPnombre_usuario());
-        usuario.setSnombre_usuario(dto.getSnombre_usuario());
-        usuario.setAppaterno_usuario(dto.getAppaterno_usuario());
-        usuario.setApmaterno_usuario(dto.getApmaterno_usuario());
+        usuario.setRutUsuario(dto.getRut_usuario());
+        usuario.setPnombreUsuario(dto.getPnombre_usuario());
+        usuario.setSnombreUsuario(dto.getSnombre_usuario());
+        usuario.setAppaternoUsuario(dto.getAppaterno_usuario());
+        usuario.setApmaternoUsuario(dto.getApmaterno_usuario());
         usuario.setEmail(dto.getEmail());
         usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
         usuario.setActivo(true);
@@ -78,10 +78,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         Rol rol = rolRepository.findById(dto.getRol_id())
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
-        usuario.setPnombre_usuario(dto.getPnombre_usuario());
-        usuario.setSnombre_usuario(dto.getSnombre_usuario());
-        usuario.setAppaterno_usuario(dto.getAppaterno_usuario());
-        usuario.setApmaterno_usuario(dto.getApmaterno_usuario());
+        usuario.setPnombreUsuario(dto.getPnombre_usuario());
+        usuario.setSnombreUsuario(dto.getSnombre_usuario());
+        usuario.setAppaternoUsuario(dto.getAppaterno_usuario());
+        usuario.setApmaternoUsuario(dto.getApmaterno_usuario());
         usuario.setEmail(dto.getEmail());
         usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
         usuario.setRol(rol);
@@ -99,15 +99,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private UsuarioResponseDTO mapToDTO(Usuario u) {
         UsuarioResponseDTO dto = new UsuarioResponseDTO();
-        dto.setId_usuario(u.getId_usuario());
-        dto.setRut_usuario(u.getRut_usuario());
-        dto.setPnombre_usuario(u.getPnombre_usuario());
-        dto.setSnombre_usuario(u.getSnombre_usuario());
-        dto.setAppaterno_usuario(u.getAppaterno_usuario());
-        dto.setApmaterno_usuario(u.getApmaterno_usuario());
+        dto.setId_usuario(u.getIdUsuario());
+        dto.setRut_usuario(u.getRutUsuario());
+        dto.setPnombre_usuario(u.getPnombreUsuario());
+        dto.setSnombre_usuario(u.getSnombreUsuario());
+        dto.setAppaterno_usuario(u.getAppaternoUsuario());
+        dto.setApmaterno_usuario(u.getApmaternoUsuario());
         dto.setEmail(u.getEmail());
         dto.setActivo(u.getActivo());
-        dto.setNombre_rol(u.getRol().getNombre_rol());
+        dto.setNombre_rol(u.getRol().getNombreRol());
         return dto;
     }
 

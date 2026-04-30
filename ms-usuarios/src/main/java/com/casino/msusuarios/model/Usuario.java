@@ -14,22 +14,22 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_usuario;
+    private Long idUsuario;
 
     @Column(nullable = false, unique = true, length = 12)
-    private String rut_usuario;
+    private String rutUsuario;
 
     @Column(nullable = false, length = 50)
-    private String pnombre_usuario;
+    private String pnombreUsuario;
 
     @Column(length = 50)
-    private String snombre_usuario;
+    private String snombreUsuario;
 
     @Column(nullable = false, length = 50)
-    private String appaterno_usuario;
+    private String appaternoUsuario;
 
     @Column(length = 50)
-    private String apmaterno_usuario;
+    private String apmaternoUsuario;
 
     @Column(nullable = false, unique = true, length = 100)
     private String email;

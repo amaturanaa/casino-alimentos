@@ -9,8 +9,8 @@ import java.util.List;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByEmail(String email);
-    Optional<Usuario> findByRut_usuario(String rut_usuario);
+    Optional<Usuario> findByRutUsuario(String rutUsuario);
     List<Usuario> findByActivo(Boolean activo);
     boolean existsByEmail(String email);
-    boolean existsByRut_usuario(String rut_usuario);
+    boolean existsByRutUsuario(String rutUsuario);
 }

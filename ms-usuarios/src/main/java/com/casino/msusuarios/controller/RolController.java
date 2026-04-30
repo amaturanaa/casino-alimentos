@@ -21,7 +21,7 @@ public class RolController {
     @PostMapping
     public ResponseEntity<Rol> crearRol(@Valid @RequestBody RolRequestDTO dto) {
         Rol rol = new Rol();
-        rol.setNombre_rol(dto.getNombre_rol());
+        rol.setNombreRol(dto.getNombre_rol());
         rol.setDescripcion(dto.getDescripcion());
         return ResponseEntity.status(HttpStatus.CREATED).body(rolRepository.save(rol));
     }
