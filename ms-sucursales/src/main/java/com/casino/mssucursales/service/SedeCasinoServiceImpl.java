@@ -1,14 +1,13 @@
 package com.casino.mssucursales.service;
 
-
 import com.casino.mssucursales.dto.SedeCasinoRequestDTO;
 import com.casino.mssucursales.dto.SedeCasinoResponseDTO;
 import com.casino.mssucursales.model.SedeCasino;
 import com.casino.mssucursales.repository.SedeCasinoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +34,7 @@ public class SedeCasinoServiceImpl implements SedeCasinoService {
         return sedeCasinoRepository.findAll()
                 .stream()
                 .map(this::mapToResponse)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -45,14 +44,20 @@ public class SedeCasinoServiceImpl implements SedeCasinoService {
                 .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
     }
 
-
     @Override
     public SedeCasinoResponseDTO cambiarEstado(Long id, Boolean estado) {
         SedeCasino sede = sedeCasinoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
-
         sede.setEstadoOperativo(estado);
         return mapToResponse(sedeCasinoRepository.save(sede));
+    }
+
+    @Override
+    public List<SedeCasinoResponseDTO> listarPorEstado(Boolean estado) {
+        return sedeCasinoRepository.findByEstadoOperativo(estado)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
     private SedeCasinoResponseDTO mapToResponse(SedeCasino sede) {

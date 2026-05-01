@@ -15,4 +15,6 @@ public interface SedeCasinoService {
     SedeCasinoResponseDTO obtenerPorId(Long id);
 
     SedeCasinoResponseDTO cambiarEstado(Long id, Boolean estado);
+
+    List<SedeCasinoResponseDTO> listarPorEstado(Boolean estado);
 }

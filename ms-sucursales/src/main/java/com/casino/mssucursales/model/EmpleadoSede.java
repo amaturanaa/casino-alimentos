@@ -15,13 +15,15 @@ public class EmpleadoSede {
     @EmbeddedId
     private EmpleadoSedeId id;
 
-    @ManyToOne
+
     @MapsId("idEmpleado")
+    @ManyToOne
     @JoinColumn(name = "idEmpleado", nullable = false)
     private Empleado empleado;
 
-    @ManyToOne
+
     @MapsId("idSedeCasino")
+    @ManyToOne
     @JoinColumn(name = "idSedeCasino", nullable = false)
     private SedeCasino sedeCasino;
 }
