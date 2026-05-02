@@ -10,5 +10,5 @@ public interface CategoriaMenuRepository extends JpaRepository<CategoriaMenu, Lo
 
     List<CategoriaMenu> findByEstado(Boolean estado);
 
-    boolean existsBynombre(String nombre);
+    boolean existsByNombre(String nombre);
 }

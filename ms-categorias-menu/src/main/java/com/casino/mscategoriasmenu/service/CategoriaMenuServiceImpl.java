@@ -18,7 +18,7 @@ public class CategoriaMenuServiceImpl implements CategoriaMenuService {
     @Override
     public CategoriaMenuResponseDTO crear(CategoriaMenuRequestDTO request) {
 
-        if (repository.existsBynombre(request.getNombre())) {
+        if (repository.existsByNombre(request.getNombre())) {
             throw new RuntimeException("La categoría ya existe");
         }
 
