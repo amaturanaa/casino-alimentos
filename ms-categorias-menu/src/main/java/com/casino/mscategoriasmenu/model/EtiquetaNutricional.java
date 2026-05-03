@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EtiquetaNutricional {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idEtiquetaNutricional;
+
     @OneToOne
     @JoinColumn(name = "categoria_id", nullable = false, unique = true)
     private CategoriaMenu categoriaMenu;

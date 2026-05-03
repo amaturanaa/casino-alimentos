@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface EtiquetaNutricionalRepository extends JpaRepository<EtiquetaNutricional, Long> {
 
-    Optional<EtiquetaNutricional> findByCategoriaMenuId(Long categoriaId);
+    Optional<EtiquetaNutricional> findByCategoriaMenu_Id(Long categoriaId);
 
-    boolean existsByCategoriaMenuId(Long categoriaId);
+    boolean existsByCategoriaMenu_Id(Long categoriaId);
 }
