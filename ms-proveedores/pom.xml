@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.casino</groupId>
-    <artifactId>ms-proovedores</artifactId>
+    <artifactId>ms-proveedores</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ms-proovedores</name>
     <description>ms-proovedores</description>
