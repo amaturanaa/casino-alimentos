@@ -7,6 +7,7 @@ import com.casino.msinventario.repository.TipoMovimientoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,10 +28,18 @@ public class TipoMovimientoServiceImpl implements TipoMovimientoService{
 
     @Override
     public List<TipoMovimientoResponseDTO> listar() {
-        return tipoMovimientoRepository.findAll()
-                .stream()
-                .map(t -> new TipoMovimientoResponseDTO(t.getIdTipoMovimiento(), t.getNombreTipoMovimiento()))
-                .toList();
+
+        List<TipoMovimientoResponseDTO>  lista = new ArrayList<>();
+        List<TipoMovimiento> tipos = tipoMovimientoRepository.findAll();
+
+        for (TipoMovimiento tipo : tipos) {
+            lista.add(new TipoMovimientoResponseDTO(
+                    tipo.getIdTipoMovimiento(),
+                    tipo.getNombreTipoMovimiento()
+            ));
+        }
+
+        return lista;
     }
 
     @Override

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,7 +26,11 @@ public class ProgramacionDiariaServiceImpl implements ProgramacionDiariaService 
                 .orElseThrow(() -> new RuntimeException("Plato no encontrado"));
 
         ProgramacionDiaria prog = new ProgramacionDiaria(
-                null, dto.getFecha(), dto.getSedeId(), plato, dto.getRacionesDisponibles()
+                null,
+                dto.getFecha(),
+                dto.getSedeId(),
+                plato,
+                dto.getRacionesDisponibles()
         );
 
         return mapToDTO(programacionRepository.save(prog));
@@ -33,20 +38,41 @@ public class ProgramacionDiariaServiceImpl implements ProgramacionDiariaService 
 
     @Override
     public List<ProgramacionDiariaResponseDTO> listarPorFecha(LocalDate fecha) {
-        return programacionRepository.findByFecha(fecha)
-                .stream().map(this::mapToDTO).toList();
+
+        List<ProgramacionDiariaResponseDTO> lista = new ArrayList<>();
+        List<ProgramacionDiaria> programaciones = programacionRepository.findByFecha(fecha);
+
+        for (ProgramacionDiaria prog : programaciones) {
+            lista.add(mapToDTO(prog));
+        }
+
+        return lista;
     }
 
     @Override
     public List<ProgramacionDiariaResponseDTO> listarPorSede(Long sedeId) {
-        return programacionRepository.findBySedeId(sedeId)
-                .stream().map(this::mapToDTO).toList();
+
+        List<ProgramacionDiariaResponseDTO> lista = new ArrayList<>();
+        List<ProgramacionDiaria> programaciones = programacionRepository.findBySedeId(sedeId);
+
+        for (ProgramacionDiaria prog : programaciones) {
+            lista.add(mapToDTO(prog));
+        }
+
+        return lista;
     }
 
     @Override
     public List<ProgramacionDiariaResponseDTO> listarPorFechaYSede(LocalDate fecha, Long sedeId) {
-        return programacionRepository.findByFechaAndSedeId(fecha, sedeId)
-                .stream().map(this::mapToDTO).toList();
+
+        List<ProgramacionDiariaResponseDTO> lista = new ArrayList<>();
+        List<ProgramacionDiaria> programaciones = programacionRepository.findByFechaAndSedeId(fecha, sedeId);
+
+        for (ProgramacionDiaria prog : programaciones) {
+            lista.add(mapToDTO(prog));
+        }
+
+        return lista;
     }
 
     @Override
@@ -63,8 +89,11 @@ public class ProgramacionDiariaServiceImpl implements ProgramacionDiariaService 
 
     private ProgramacionDiariaResponseDTO mapToDTO(ProgramacionDiaria p) {
         return new ProgramacionDiariaResponseDTO(
-                p.getIdProgramacion(), p.getFecha(), p.getSedeId(),
-                p.getPlato().getIdPlato(), p.getPlato().getNombrePlato(),
+                p.getIdProgramacion(),
+                p.getFecha(),
+                p.getSedeId(),
+                p.getPlato().getIdPlato(),
+                p.getPlato().getNombrePlato(),
                 p.getRacionesDisponibles()
         );
     }

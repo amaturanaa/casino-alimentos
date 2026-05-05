@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,8 +43,12 @@ public class MovimientoStockServiceImpl implements MovimientoStockService {
         ingredienteRepository.save(ingrediente);
 
         MovimientoStock movimiento = new MovimientoStock(
-                null, ingrediente, tipo, dto.getCantidad(),
-                LocalDateTime.now(), dto.getMotivo()
+                null,
+                ingrediente,
+                tipo,
+                dto.getCantidad(),
+                LocalDateTime.now(),
+                dto.getMotivo()
         );
 
         return mapToDTO(movimientoRepository.save(movimiento), ingrediente.getStockActual());
@@ -51,26 +56,41 @@ public class MovimientoStockServiceImpl implements MovimientoStockService {
 
     @Override
     public List<MovimientoStockResponseDTO> listar() {
-        return movimientoRepository.findAll()
-                .stream()
-                .map(m -> mapToDTO(m, m.getIngrediente().getStockActual()))
-                .toList();
+
+        List<MovimientoStockResponseDTO> lista = new ArrayList<>();
+        List<MovimientoStock> movimientos = movimientoRepository.findAll();
+
+        for (MovimientoStock movimiento : movimientos) {
+            lista.add(mapToDTO(movimiento, movimiento.getIngrediente().getStockActual()));
+        }
+
+        return lista;
     }
 
     @Override
     public List<MovimientoStockResponseDTO> listarPorIngrediente(Long ingredienteId) {
-        return movimientoRepository.findByIngrediente_IdIngrediente(ingredienteId)
-                .stream()
-                .map(m -> mapToDTO(m, m.getIngrediente().getStockActual()))
-                .toList();
+
+        List<MovimientoStockResponseDTO> lista = new ArrayList<>();
+        List<MovimientoStock> movimientos = movimientoRepository.findByIngrediente_IdIngrediente(ingredienteId);
+
+        for (MovimientoStock movimiento : movimientos) {
+            lista.add(mapToDTO(movimiento, movimiento.getIngrediente().getStockActual()));
+        }
+
+        return lista;
     }
 
     @Override
     public List<MovimientoStockResponseDTO> listarPorTipo(Long tipoMovimientoId) {
-        return movimientoRepository.findByTipoMovimiento_IdTipoMovimiento(tipoMovimientoId)
-                .stream()
-                .map(m -> mapToDTO(m, m.getIngrediente().getStockActual()))
-                .toList();
+
+        List<MovimientoStockResponseDTO> lista = new ArrayList<>();
+        List<MovimientoStock> movimientos =  movimientoRepository.findByTipoMovimiento_IdTipoMovimiento(tipoMovimientoId);
+
+        for (MovimientoStock movimiento : movimientos) {
+            lista.add(mapToDTO(movimiento, movimiento.getIngrediente().getStockActual()));
+        }
+
+        return lista;
     }
 
     private MovimientoStockResponseDTO mapToDTO(MovimientoStock m, Double stockResultante) {

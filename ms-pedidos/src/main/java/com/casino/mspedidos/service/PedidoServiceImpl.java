@@ -12,8 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +25,10 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public PedidoResponseDTO crearPedido(PedidoRequestDTO dto) {
-        double total = dto.getDetalles().stream()
-                .mapToDouble(DetallePedidoRequestDTO::getSubTotal)
-                .sum();
+        double total = 0;
+        for (DetallePedidoRequestDTO d : dto.getDetalles()) {
+            total += d.getSubTotal();
+        }
 
         Pedido pedido = new Pedido();
         pedido.setUsuarioId(dto.getUsuarioId());
@@ -37,14 +39,15 @@ public class PedidoServiceImpl implements PedidoService {
 
         Pedido guardado = pedidoRepository.save(pedido);
 
-        List<DetallePedido> detalles = dto.getDetalles().stream().map(d -> {
+        List<DetallePedido> detalles = new ArrayList<>();
+        for (DetallePedidoRequestDTO d : dto.getDetalles()) {
             DetallePedido detalle = new DetallePedido();
             detalle.setPedido(guardado);
             detalle.setPlatoId(d.getPlatoId());
             detalle.setCantidad(d.getCantidad());
             detalle.setSubTotal(d.getSubTotal());
-            return detalle;
-        }).collect(Collectors.toList());
+            detalles.add(detalle);
+        }
 
         detallePedidoRepository.saveAll(detalles);
         guardado.setDetalles(detalles);
@@ -61,20 +64,41 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public List<PedidoResponseDTO> listarPorUsuario(Long usuarioId) {
-        return pedidoRepository.findByUsuarioId(usuarioId)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+
+        List<PedidoResponseDTO> lista = new ArrayList<>();
+        List<Pedido> pedidos = pedidoRepository.findByUsuarioId(usuarioId);
+
+        for (Pedido pedido : pedidos) {
+            lista.add(mapToDTO(pedido));
+        }
+
+        return lista;
     }
 
     @Override
     public List<PedidoResponseDTO> listarPorSede(Long sedeId) {
-        return pedidoRepository.findBySedeId(sedeId)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+
+        List<PedidoResponseDTO> lista = new ArrayList<>();
+        List<Pedido> pedidos = pedidoRepository.findBySedeId(sedeId);
+
+        for (Pedido pedido : pedidos) {
+            lista.add(mapToDTO(pedido));
+        }
+
+        return lista;
     }
 
     @Override
     public List<PedidoResponseDTO> listarPorEstado(String estado) {
-        return pedidoRepository.findByEstado(estado)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+
+        List<PedidoResponseDTO> lista = new ArrayList<>();
+        List<Pedido> pedidos = pedidoRepository.findByEstado(estado);
+
+        for (Pedido pedido : pedidos) {
+            lista.add(mapToDTO(pedido));
+        }
+
+        return lista;
     }
 
     @Override
@@ -93,22 +117,41 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public List<PedidoResponseDTO> listar() {
-        return pedidoRepository.findAll()
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+
+        List<PedidoResponseDTO> lista = new ArrayList<>();
+        List<Pedido> pedidos = pedidoRepository.findAll();
+
+        for (Pedido pedido : pedidos) {
+            lista.add(mapToDTO(pedido));
+        }
+
+        return lista;
     }
 
     private PedidoResponseDTO mapToDTO(Pedido p) {
-        List<DetallePedidoResponseDTO> detalles = detallePedidoRepository
-                .findByPedido_IdPedido(p.getIdPedido())
-                .stream()
-                .map(d -> new DetallePedidoResponseDTO(
-                        d.getIdDetallePedido(), d.getPlatoId(),
-                        d.getCantidad(), d.getSubTotal()))
-                .collect(Collectors.toList());
+
+        List<DetallePedidoResponseDTO> detalles = new ArrayList<>();
+        List<DetallePedido> listadetalles = detallePedidoRepository.findByPedido_IdPedido(p.getIdPedido());
+
+        for (DetallePedido d : listadetalles) {
+            DetallePedidoResponseDTO dto = new DetallePedidoResponseDTO(
+                    d.getIdDetallePedido(),
+                    d.getPlatoId(),
+                    d.getCantidad(),
+                    d.getSubTotal()
+            );
+
+            detalles.add(dto);
+        }
 
         return new PedidoResponseDTO(
-                p.getIdPedido(), p.getUsuarioId(), p.getSedeId(),
-                p.getFechaHora(), p.getEstado(), p.getTotalPedido(), detalles
+                p.getIdPedido(),
+                p.getUsuarioId(),
+                p.getSedeId(),
+                p.getFechaHora(),
+                p.getEstado(),
+                p.getTotalPedido(),
+                detalles
         );
     }
 }

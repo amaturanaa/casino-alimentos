@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,34 +40,59 @@ public class TransaccionServiceImpl implements TransaccionService {
 
     @Override
     public TransaccionResponseDTO obtenerPorId(Long id) {
-        return transaccionRepository.findById(id)
-                .map(this::mapToDTO)
+
+        Transaccion transaccion = transaccionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transacción no encontrada"));
+
+        return mapToDTO(transaccion);
     }
 
     @Override
     public TransaccionResponseDTO obtenerPorPedido(Long pedidoId) {
-        return transaccionRepository.findByPedidoId(pedidoId)
-                .map(this::mapToDTO)
+
+        Transaccion transaccion = transaccionRepository.findByPedidoId(pedidoId)
                 .orElseThrow(() -> new RuntimeException("Transacción no encontrada"));
+
+        return mapToDTO(transaccion);
     }
 
     @Override
     public List<TransaccionResponseDTO> listarPorUsuario(Long usuarioId) {
-        return transaccionRepository.findByUsuarioId(usuarioId)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+
+        List<TransaccionResponseDTO> lista = new ArrayList<>();
+        List<Transaccion> transacciones = transaccionRepository.findByUsuarioId(usuarioId);
+
+        for (Transaccion trans : transacciones) {
+            lista.add(mapToDTO(trans));
+        }
+
+        return lista;
     }
 
     @Override
     public List<TransaccionResponseDTO> listarPorEstado(String estado) {
-        return transaccionRepository.findByEstadoPago(estado)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+
+        List<TransaccionResponseDTO> lista = new ArrayList<>();
+        List<Transaccion> transacciones = transaccionRepository.findByEstadoPago(estado);
+
+        for (Transaccion trans : transacciones) {
+            lista.add(mapToDTO(trans));
+        }
+
+        return lista;
     }
 
     @Override
     public List<TransaccionResponseDTO> listarPorMetodo(String metodoPago) {
-        return transaccionRepository.findByMetodoPago(metodoPago)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+
+        List<TransaccionResponseDTO> lista = new ArrayList<>();
+        List<Transaccion> transacciones = transaccionRepository.findByEstadoPago(metodoPago);
+
+        for (Transaccion trans : transacciones) {
+            lista.add(mapToDTO(trans));
+        }
+
+        return lista;
     }
 
     @Override
@@ -85,14 +110,26 @@ public class TransaccionServiceImpl implements TransaccionService {
 
     @Override
     public List<TransaccionResponseDTO> listar() {
-        return transaccionRepository.findAll()
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+
+        List<TransaccionResponseDTO> lista = new ArrayList<>();
+        List<Transaccion> transacciones = transaccionRepository.findAll();
+
+        for (Transaccion trans : transacciones) {
+            lista.add(mapToDTO(trans));
+        }
+
+        return lista;
     }
 
     private TransaccionResponseDTO mapToDTO(Transaccion t) {
         return new TransaccionResponseDTO(
-                t.getIdTransaccion(), t.getPedidoId(), t.getUsuarioId(),
-                t.getMonto(), t.getMetodoPago(), t.getFechaPago(), t.getEstadoPago()
+                t.getIdTransaccion(),
+                t.getPedidoId(),
+                t.getUsuarioId(),
+                t.getMonto(),
+                t.getMetodoPago(),
+                t.getFechaPago(),
+                t.getEstadoPago()
         );
     }
 }
