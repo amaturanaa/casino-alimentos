@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Proveedor {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProveedor;
@@ -33,5 +33,4 @@ public class Proveedor {
 
     @Column(nullable = false)
     private Boolean activo = true;
-
 }

@@ -1,10 +1,10 @@
-package com.casino.msproveedores;
+package com.casino.msreservas;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MsProovedoresApplicationTests {
+class MsReservasApplicationTests {
 
     @Test
     void contextLoads() {

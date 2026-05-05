@@ -11,4 +11,4 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
     Optional<Proveedor> findByRutProveedor(String rutProveedor);
     boolean existsByRutProveedor(String rutProveedor);
     List<Proveedor> findByActivo(Boolean activo);
-    }
+}

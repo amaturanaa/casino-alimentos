@@ -1,4 +1,4 @@
-package com.casino.msproveedores.model;
+package com.casino.msreservas.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,30 +7,29 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "orden_compra")
+@Table(name = "reserva")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrdenCompra {
+public class Reserva {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idOrdenCompra;
+    private Long idReserva;
+
+    @Column(nullable = false)
+    private Long usuarioId;
 
     @ManyToOne
-    @JoinColumn(name = "proveedor_id", nullable = false)
-    private Proveedor proveedor;
+    @JoinColumn(name = "turno_id", nullable = false)
+    private TurnoDisponible turno;
 
-    // Referencia a ms-sucursales
     @Column(nullable = false)
     private Long sedeId;
 
     @Column(nullable = false)
-    private LocalDateTime fechaSolicitud;
+    private LocalDateTime fechaCreacion;
 
     @Column(nullable = false, length = 20)
     private String estado;
-
-    @Column(nullable = false)
-    private Double costoTotal;
 }

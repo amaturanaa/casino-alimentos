@@ -9,137 +9,120 @@ import com.casino.msproveedores.model.Proveedor;
 import com.casino.msproveedores.repository.DetalleOrdenCompraRepository;
 import com.casino.msproveedores.repository.OrdenCompraRepository;
 import com.casino.msproveedores.repository.ProveedorRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-
 public class OrdenCompraServiceImpl implements OrdenCompraService {
 
     private final OrdenCompraRepository ordenCompraRepository;
-    private final DetalleOrdenCompraRepository detalleOrdenCompraRepository;
+    private final DetalleOrdenCompraRepository detalleRepository;
     private final ProveedorRepository proveedorRepository;
 
     @Override
-    @Transactional
     public OrdenCompraResponseDTO crear(OrdenCompraRequestDTO dto) {
-        // 1. Validar que el proveedor exista
         Proveedor proveedor = proveedorRepository.findById(dto.getProveedorId())
                 .orElseThrow(() -> new RuntimeException("Proveedor no encontrado"));
 
-        // 2. Calcular el costo total sumando (cantidad * precio) de todos los detalles
         double costoTotal = dto.getDetalles().stream()
                 .mapToDouble(d -> d.getCantidad() * d.getPrecioUnitario())
                 .sum();
 
-        // 3. Crear y guardar la Orden de Compra principal
-        OrdenCompra ordenCompra = new OrdenCompra(
-                null,
-                proveedor,
-                dto.getSedeId(),
-                LocalDateTime.now(),
-                "PENDIENTE", // Estado inicial por defecto
-                costoTotal
+        OrdenCompra orden = new OrdenCompra(
+                null, proveedor, dto.getSedeId(),
+                LocalDateTime.now(), "PENDIENTE", costoTotal
         );
-        OrdenCompra ordenGuardada = ordenCompraRepository.save(ordenCompra);
 
-        // 4. Crear y guardar los detalles de la orden (productos solicitados para el casino)
-        List<DetalleOrdenCompra> detallesGuardados = dto.getDetalles().stream().map(d -> {
-            Double subTotal = d.getCantidad() * d.getPrecioUnitario();
-            DetalleOrdenCompra detalle = new DetalleOrdenCompra(
-                    null,
-                    ordenGuardada,
-                    d.getNombreProducto(),
-                    d.getCantidad(),
-                    d.getPrecioUnitario(),
-                    subTotal
+        OrdenCompra guardada = ordenCompraRepository.save(orden);
+
+        List<DetalleOrdenCompra> detalles = dto.getDetalles().stream().map(d -> {
+            double sub = d.getCantidad() * d.getPrecioUnitario();
+            return new DetalleOrdenCompra(
+                    null, guardada, d.getNombreProducto(),
+                    d.getCantidad(), d.getPrecioUnitario(), sub
             );
-            return detalleOrdenCompraRepository.save(detalle);
-        }).toList();
+        }).collect(Collectors.toList());
 
-        // 5. Retornar el DTO mapeado
-        return mapToDTO(ordenGuardada, detallesGuardados);
+        detalleRepository.saveAll(detalles);
+        return mapToDTO(guardada, detalles);
     }
 
     @Override
     public OrdenCompraResponseDTO obtenerPorId(Long id) {
         OrdenCompra orden = ordenCompraRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Orden de compra no encontrada"));
-        List<DetalleOrdenCompra> detalles = detalleOrdenCompraRepository.findByOrdenCompra_IdOrdenCompra(id);
+                .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
+        List<DetalleOrdenCompra> detalles = detalleRepository
+                .findByOrdenCompra_IdOrdenCompra(id);
         return mapToDTO(orden, detalles);
     }
 
     @Override
     public List<OrdenCompraResponseDTO> listar() {
         return ordenCompraRepository.findAll().stream()
-                .map(this::mapOrdenWithDetalles)
-                .toList();
+                .map(o -> mapToDTO(o, detalleRepository
+                        .findByOrdenCompra_IdOrdenCompra(o.getIdOrdenCompra())))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<OrdenCompraResponseDTO> listarPorProveedor(Long proveedorId) {
         return ordenCompraRepository.findByProveedor_IdProveedor(proveedorId).stream()
-                .map(this::mapOrdenWithDetalles)
-                .toList();
+                .map(o -> mapToDTO(o, detalleRepository
+                        .findByOrdenCompra_IdOrdenCompra(o.getIdOrdenCompra())))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<OrdenCompraResponseDTO> listarPorSede(Long sedeId) {
         return ordenCompraRepository.findBySedeId(sedeId).stream()
-                .map(this::mapOrdenWithDetalles)
-                .toList();
+                .map(o -> mapToDTO(o, detalleRepository
+                        .findByOrdenCompra_IdOrdenCompra(o.getIdOrdenCompra())))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<OrdenCompraResponseDTO> listarPorEstado(String estado) {
         return ordenCompraRepository.findByEstado(estado).stream()
-                .map(this::mapOrdenWithDetalles)
-                .toList();
+                .map(o -> mapToDTO(o, detalleRepository
+                        .findByOrdenCompra_IdOrdenCompra(o.getIdOrdenCompra())))
+                .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional
     public OrdenCompraResponseDTO cambiarEstado(Long id, String estado) {
         OrdenCompra orden = ordenCompraRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Orden de compra no encontrada"));
+                .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
 
-        orden.setEstado(estado); // Ej: cambiar a "APROBADA", "ENTREGADA" o "CANCELADA"
-        OrdenCompra ordenActualizada = ordenCompraRepository.save(orden);
+        List<String> estadosValidos = List.of("PENDIENTE", "RECIBIDA", "CANCELADA");
+        if (!estadosValidos.contains(estado))
+            throw new RuntimeException("Estado inválido");
 
-        List<DetalleOrdenCompra> detalles = detalleOrdenCompraRepository.findByOrdenCompra_IdOrdenCompra(id);
-        return mapToDTO(ordenActualizada, detalles);
-    }
-
-    // --- MÉTODOS DE MAPEO (Privados) ---
-
-    private OrdenCompraResponseDTO mapOrdenWithDetalles(OrdenCompra orden) {
-        List<DetalleOrdenCompra> detalles = detalleOrdenCompraRepository.findByOrdenCompra_IdOrdenCompra(orden.getIdOrdenCompra());
+        orden.setEstado(estado);
+        ordenCompraRepository.save(orden);
+        List<DetalleOrdenCompra> detalles = detalleRepository
+                .findByOrdenCompra_IdOrdenCompra(id);
         return mapToDTO(orden, detalles);
     }
 
-    private OrdenCompraResponseDTO mapToDTO(OrdenCompra orden, List<DetalleOrdenCompra> detalles) {
+    private OrdenCompraResponseDTO mapToDTO(OrdenCompra o, List<DetalleOrdenCompra> detalles) {
         List<DetalleOrdenCompraResponseDTO> detallesDTO = detalles.stream()
                 .map(d -> new DetalleOrdenCompraResponseDTO(
-                        d.getIdDetalle(),
-                        d.getNombreProducto(),
-                        d.getCantidad(),
-                        d.getPrecioUnitario(),
-                        d.getSubTotal()
-                )).toList();
+                        d.getIdDetalle(), d.getNombreProducto(),
+                        d.getCantidad(), d.getPrecioUnitario(), d.getSubTotal()))
+                .collect(Collectors.toList());
 
         return new OrdenCompraResponseDTO(
-                orden.getIdOrdenCompra(),
-                orden.getProveedor().getIdProveedor(),
-                orden.getProveedor().getRazonSocial(), // Permite ver el nombre rápido en el front
-                orden.getSedeId(),
-                orden.getFechaSolicitud(),
-                orden.getEstado(),
-                orden.getCostoTotal(),
+                o.getIdOrdenCompra(),
+                o.getProveedor().getIdProveedor(),
+                o.getProveedor().getRazonSocial(),
+                o.getSedeId(),
+                o.getFechaSolicitud(),
+                o.getEstado(),
+                o.getCostoTotal(),
                 detallesDTO
         );
     }

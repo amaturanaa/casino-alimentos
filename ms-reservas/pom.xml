@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.casino</groupId>
-    <artifactId>ms-proveedores</artifactId>
+    <artifactId>ms-reservas</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ms-proveedores</name>
-    <description>ms-proveedores</description>
+    <name>ms-reservas</name>
+    <description>ms-reservas</description>
     <url/>
     <licenses>
         <license/>

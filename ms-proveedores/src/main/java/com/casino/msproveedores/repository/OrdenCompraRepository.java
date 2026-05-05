@@ -11,4 +11,3 @@ public interface OrdenCompraRepository extends JpaRepository<OrdenCompra, Long> 
     List<OrdenCompra> findBySedeId(Long sedeId);
     List<OrdenCompra> findByEstado(String estado);
 }
-
