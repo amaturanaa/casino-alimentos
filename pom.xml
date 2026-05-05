@@ -11,6 +11,7 @@
     <groupId>com.casino</groupId>
     <artifactId>casino-alimentos</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>casino-alimentos</name>
     <description>casino-alimentos</description>
     <url/>
@@ -20,6 +21,9 @@
     <developers>
         <developer/>
     </developers>
+    <modules>
+        <module>ms-reservas</module>
+    </modules>
     <scm>
         <connection/>
         <developerConnection/>
