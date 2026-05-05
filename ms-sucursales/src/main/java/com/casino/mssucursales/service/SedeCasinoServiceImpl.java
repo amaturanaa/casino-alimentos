@@ -6,8 +6,9 @@ import com.casino.mssucursales.model.SedeCasino;
 import com.casino.mssucursales.repository.SedeCasinoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,17 +32,20 @@ public class SedeCasinoServiceImpl implements SedeCasinoService {
 
     @Override
     public List<SedeCasinoResponseDTO> listarSedes() {
-        return sedeCasinoRepository.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+        List<SedeCasinoResponseDTO> lista = new ArrayList<>();
+        List<SedeCasino> sedes = sedeCasinoRepository.findAll();
+
+        for (SedeCasino s : sedes) {
+            lista.add(mapToResponse(s));
+        }
+        return lista;
     }
 
     @Override
     public SedeCasinoResponseDTO obtenerPorId(Long id) {
-        return sedeCasinoRepository.findById(id)
-                .map(this::mapToResponse)
+        SedeCasino sede = sedeCasinoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
+        return mapToResponse(sede);
     }
 
     @Override
@@ -54,10 +58,13 @@ public class SedeCasinoServiceImpl implements SedeCasinoService {
 
     @Override
     public List<SedeCasinoResponseDTO> listarPorEstado(Boolean estado) {
-        return sedeCasinoRepository.findByEstadoOperativo(estado)
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+        List<SedeCasinoResponseDTO> lista = new ArrayList<>();
+        List<SedeCasino> sedes = sedeCasinoRepository.findByEstadoOperativo(estado);
+
+        for (SedeCasino s : sedes) {
+            lista.add(mapToResponse(s));
+        }
+        return lista;
     }
 
     private SedeCasinoResponseDTO mapToResponse(SedeCasino sede) {

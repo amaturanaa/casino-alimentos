@@ -7,6 +7,7 @@ import com.casino.mssucursales.repository.EmpleadoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,10 +41,13 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     @Override
     public List<EmpleadoResponseDTO> listarEmpleados() {
-        return empleadoRepository.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .toList();
+        List<EmpleadoResponseDTO> lista = new ArrayList<>();
+        List<Empleado> empleados = empleadoRepository.findAll();
+
+        for (Empleado e : empleados) {
+            lista.add(mapToResponse(e));
+        }
+        return lista;
     }
 
     private EmpleadoResponseDTO mapToResponse(Empleado empleado) {
