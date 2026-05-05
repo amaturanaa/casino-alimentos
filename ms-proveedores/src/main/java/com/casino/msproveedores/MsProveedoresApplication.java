@@ -6,10 +6,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
-public class MsProovedoresApplication {
-
+public class MsProveedoresApplication {
     public static void main(String[] args) {
-        SpringApplication.run(MsProovedoresApplication.class, args);
+        SpringApplication.run(MsProveedoresApplication.class, args);
     }
-
 }

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class ProveedorResponseDTO {
     private Long idProveedor;
     private String rutProveedor;
@@ -17,4 +16,3 @@ public class ProveedorResponseDTO {
     private String telefono;
     private Boolean activo;
 }
-
