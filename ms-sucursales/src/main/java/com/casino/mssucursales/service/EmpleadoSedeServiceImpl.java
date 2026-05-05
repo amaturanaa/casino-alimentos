@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,23 +47,31 @@ public class EmpleadoSedeServiceImpl implements EmpleadoSedeService {
 
     @Override
     public List<EmpleadoSedeResponseDTO> listarPorSede(Long idSedeCasino) {
-        return repository.findById_IdSedeCasino(idSedeCasino)
-                .stream()
-                .map(e -> new EmpleadoSedeResponseDTO(
-                        e.getId().getIdEmpleado(),
-                        e.getId().getIdSedeCasino()
-                ))
-                .collect(Collectors.toList());
+        List<EmpleadoSedeResponseDTO> lista = new ArrayList<>();
+        List<EmpleadoSede> empleadosSede = repository.findById_IdSedeCasino(idSedeCasino);
+
+        for (EmpleadoSede e : empleadosSede) {
+            EmpleadoSedeResponseDTO dto = new EmpleadoSedeResponseDTO(
+                    e.getId().getIdEmpleado(),
+                    e.getId().getIdSedeCasino()
+            );
+            lista.add(dto);
+        }
+        return lista;
     }
 
     @Override
     public List<EmpleadoSedeResponseDTO> listarPorEmpleado(Long idEmpleado) {
-        return repository.findById_IdEmpleado(idEmpleado)
-                .stream()
-                .map(e -> new EmpleadoSedeResponseDTO(
-                        e.getId().getIdEmpleado(),
-                        e.getId().getIdSedeCasino()
-                ))
-                .collect(Collectors.toList());
+        List<EmpleadoSedeResponseDTO> lista = new ArrayList<>();
+        List<EmpleadoSede> sedesEmpleado = repository.findById_IdEmpleado(idEmpleado);
+
+        for (EmpleadoSede e : sedesEmpleado) {
+            EmpleadoSedeResponseDTO dto = new EmpleadoSedeResponseDTO(
+                    e.getId().getIdEmpleado(),
+                    e.getId().getIdSedeCasino()
+            );
+            lista.add(dto);
+        }
+        return lista;
     }
 }
