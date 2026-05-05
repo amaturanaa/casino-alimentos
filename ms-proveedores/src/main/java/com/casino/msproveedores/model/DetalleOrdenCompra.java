@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class DetalleOrdenCompra {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDetalle;

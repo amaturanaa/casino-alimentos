@@ -1,9 +1,7 @@
 package com.casino.msproveedores.service;
 
-
 import com.casino.msproveedores.dto.OrdenCompraRequestDTO;
 import com.casino.msproveedores.dto.OrdenCompraResponseDTO;
-
 import java.util.List;
 
 public interface OrdenCompraService {
