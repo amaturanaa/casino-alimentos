@@ -6,6 +6,7 @@ import com.casino.msmenu.model.Plato;
 import com.casino.msmenu.model.ProgramacionDiaria;
 import com.casino.msmenu.repository.PlatoRepository;
 import com.casino.msmenu.repository.ProgramacionDiariaRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,17 @@ public class ProgramacionDiariaServiceImpl implements ProgramacionDiariaService 
 
     @Override
     public ProgramacionDiariaResponseDTO crear(ProgramacionDiariaRequestDTO dto) {
+
+        if (dto.getFecha().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("La fecha no puede ser anterior a hoy");
+        }
+
+        if (dto.getRacionesDisponibles() <= 0) {
+            throw new IllegalArgumentException("Las raciones deben ser mayores a cero");
+        }
+
         Plato plato = platoRepository.findById(dto.getPlatoId())
-                .orElseThrow(() -> new RuntimeException("Plato no encontrado"));
+                .orElseThrow(() -> new IllegalArgumentException("Plato no encontrado"));
 
         ProgramacionDiaria prog = new ProgramacionDiaria(
                 null,
@@ -76,15 +86,19 @@ public class ProgramacionDiariaServiceImpl implements ProgramacionDiariaService 
     }
 
     @Override
+    @Transactional
     public ProgramacionDiariaResponseDTO descontarRacion(Long id) {
-        ProgramacionDiaria prog = programacionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Programación no encontrada"));
 
-        if (prog.getRacionesDisponibles() <= 0)
-            throw new RuntimeException("No hay raciones disponibles");
+        ProgramacionDiaria prog = programacionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Programación no encontrada"));
+
+        if (prog.getRacionesDisponibles() <= 0) {
+            throw new IllegalStateException("No hay raciones disponibles");
+        }
 
         prog.setRacionesDisponibles(prog.getRacionesDisponibles() - 1);
-        return mapToDTO(programacionRepository.save(prog));
+
+        return mapToDTO(prog);
     }
 
     private ProgramacionDiariaResponseDTO mapToDTO(ProgramacionDiaria p) {

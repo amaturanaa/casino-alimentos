@@ -21,7 +21,7 @@ public class ProgramacionDiaria {
     @Column(nullable = false)
     private LocalDate fecha;
 
-    // Referencia a ms-sucursales (solo Long, sin FK física)
+
     @Column(nullable = false)
     private Long sedeId;
 

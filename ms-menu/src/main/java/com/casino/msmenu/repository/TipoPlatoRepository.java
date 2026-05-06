@@ -11,4 +11,5 @@ public interface TipoPlatoRepository extends JpaRepository<TipoPlato, Long> {
     Optional<TipoPlato> findByNombreTipoPlato(String nombre);
 
     boolean existsByNombreTipoPlato(String nombre);
+
 }

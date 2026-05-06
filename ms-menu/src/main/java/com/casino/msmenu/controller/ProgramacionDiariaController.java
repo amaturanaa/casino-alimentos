@@ -4,6 +4,7 @@ import com.casino.msmenu.dto.ProgramacionDiariaRequestDTO;
 import com.casino.msmenu.dto.ProgramacionDiariaResponseDTO;
 import com.casino.msmenu.service.ProgramacionDiariaService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -46,7 +47,8 @@ public class ProgramacionDiariaController {
     }
 
     @PatchMapping("/{id}/descontar")
-    public ResponseEntity<ProgramacionDiariaResponseDTO> descontarRacion(@PathVariable Long id) {
-        return ResponseEntity.ok(programacionService.descontarRacion(id));
+    public ResponseEntity<ProgramacionDiariaResponseDTO> descontarRacion(
+            @PathVariable @NotNull(message = "El id de la programación es obligatorio") Long id) {
+            return ResponseEntity.ok(programacionService.descontarRacion(id));
     }
 }

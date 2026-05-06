@@ -4,6 +4,7 @@ import com.casino.msmenu.dto.PlatoRequestDTO;
 import com.casino.msmenu.dto.PlatoResponseDTO;
 import com.casino.msmenu.service.PlatoService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,10 @@ public class PlatoController {
 
     @PatchMapping("/{id}/disponibilidad")
     public ResponseEntity<PlatoResponseDTO> cambiarDisponibilidad(
-            @PathVariable Long id, @RequestParam Boolean disponible) {
+            @PathVariable Long id,
+            @RequestParam @NotNull(message = "El parámetro 'disponible' es obligatorio")
+            Boolean disponible) {
+
         return ResponseEntity.ok(platoService.cambiarDisponibilidad(id, disponible));
     }
 
