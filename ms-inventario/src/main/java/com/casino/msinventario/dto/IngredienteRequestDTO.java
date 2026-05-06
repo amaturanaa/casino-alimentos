@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class IngredienteRequestDTO {
 
-    @NotBlank
+    @NotBlank(message = "El nombre del ingrediente es obligatorio")
     @Size(max = 100)
     private String nombreIngrediente;
 
@@ -20,7 +20,8 @@ public class IngredienteRequestDTO {
     @Size(max = 20)
     private String unidadMedida;
 
-    @NotNull @Min(0)
+    @NotNull(message = "El stock actual es obligatorio")
+    @Min(value = 0, message = "El stock actual no puede ser negativo")
     private Double stockActual;
 
     @NotNull @Min(0)

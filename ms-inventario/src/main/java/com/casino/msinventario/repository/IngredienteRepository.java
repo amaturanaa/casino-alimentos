@@ -10,8 +10,4 @@ import java.util.List;
 public interface IngredienteRepository extends JpaRepository<Ingrediente, Long> {
 
     List<Ingrediente> findBySedeId(Long sedeId);
-
-    List<Ingrediente> findByStockActualLessThanEqual(Double stock);
-
-    List<Ingrediente> findBySedeIdAndStockActualLessThanEqual(Long sedeId, Double stock);
 }

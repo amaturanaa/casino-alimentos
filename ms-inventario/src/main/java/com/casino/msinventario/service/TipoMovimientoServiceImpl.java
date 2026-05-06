@@ -45,7 +45,7 @@ public class TipoMovimientoServiceImpl implements TipoMovimientoService{
     @Override
     public TipoMovimientoResponseDTO obtenerPorId(Long id) {
         TipoMovimiento t = tipoMovimientoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("TipoMovimiento no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Tipode movimiento no encontrado"));
         return new TipoMovimientoResponseDTO(t.getIdTipoMovimiento(), t.getNombreTipoMovimiento());
     }
 

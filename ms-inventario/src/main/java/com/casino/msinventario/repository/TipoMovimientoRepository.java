@@ -9,7 +9,5 @@ import java.util.Optional;
 @Repository
 public interface TipoMovimientoRepository extends JpaRepository<TipoMovimiento, Long> {
 
-    Optional<TipoMovimiento> findByNombreTipoMovimiento(String nombre);
-
     boolean existsByNombreTipoMovimiento(String nombre);
 }

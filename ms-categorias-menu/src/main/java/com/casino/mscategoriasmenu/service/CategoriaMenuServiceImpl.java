@@ -60,7 +60,7 @@ public class CategoriaMenuServiceImpl implements CategoriaMenuService {
     @Override
     public CategoriaMenuResponseDTO obtenerPorId(Long id) {
         CategoriaMenu c = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+                .orElseThrow(() -> new RuntimeException("No existe una categoría con el id indicado"));
 
         return new CategoriaMenuResponseDTO(
                 c.getId(),

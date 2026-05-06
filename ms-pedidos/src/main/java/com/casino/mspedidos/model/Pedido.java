@@ -1,6 +1,7 @@
 package com.casino.mspedidos.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,11 +21,11 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPedido;
 
-    // Referencia a ms-usuarios
+    // Referencia a microservicio usuarios
     @Column(nullable = false)
     private Long usuarioId;
 
-    // Referencia a ms-sucursales
+    // Referencia a microservicio ucursales
     @Column(nullable = false)
     private Long sedeId;
 

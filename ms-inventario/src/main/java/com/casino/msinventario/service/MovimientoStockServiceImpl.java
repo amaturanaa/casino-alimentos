@@ -29,7 +29,7 @@ public class MovimientoStockServiceImpl implements MovimientoStockService {
                 .orElseThrow(() -> new RuntimeException("Ingrediente no encontrado"));
 
         TipoMovimiento tipo = tipoMovimientoRepository.findById(dto.getTipoMovimientoId())
-                .orElseThrow(() -> new RuntimeException("TipoMovimiento no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Tipo de movimiento no encontrado"));
 
         String nombreTipo = tipo.getNombreTipoMovimiento().toUpperCase();
         if (nombreTipo.contains("SALIDA")) {
