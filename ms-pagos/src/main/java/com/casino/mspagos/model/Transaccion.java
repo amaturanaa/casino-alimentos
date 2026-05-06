@@ -18,11 +18,11 @@ public class Transaccion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTransaccion;
 
-    // Referencia a ms-pedidos
+
     @Column(nullable = false)
     private Long pedidoId;
 
-    // Referencia a ms-usuarios
+
     @Column(nullable = false)
     private Long usuarioId;
 

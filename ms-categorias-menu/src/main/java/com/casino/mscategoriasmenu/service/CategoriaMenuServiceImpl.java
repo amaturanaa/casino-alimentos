@@ -77,7 +77,9 @@ public class CategoriaMenuServiceImpl implements CategoriaMenuService {
         repository.save(c);
 
         return new CategoriaMenuResponseDTO(
-                c.getId(), c.getNombre(), c.getEstado());
+                c.getId(),
+                c.getNombre(),
+                c.getEstado());
     }
 
     @Override

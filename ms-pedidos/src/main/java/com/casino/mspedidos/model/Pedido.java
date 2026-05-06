@@ -21,11 +21,11 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPedido;
 
-    // Referencia a microservicio usuarios
+
     @Column(nullable = false)
     private Long usuarioId;
 
-    // Referencia a microservicio ucursales
+
     @Column(nullable = false)
     private Long sedeId;
 

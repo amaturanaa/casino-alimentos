@@ -16,5 +16,4 @@ public interface TransaccionRepository extends JpaRepository<Transaccion, Long> 
 
     List<Transaccion> findByEstadoPago(String estadoPago);
 
-    List<Transaccion> findByMetodoPago(String metodoPago);
 }

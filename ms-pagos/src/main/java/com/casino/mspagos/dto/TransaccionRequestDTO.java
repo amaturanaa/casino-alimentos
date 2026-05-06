@@ -8,16 +8,16 @@ import lombok.Data;
 @Data
 public class TransaccionRequestDTO {
 
-    @NotNull
+    @NotNull(message = "El id del pedido es obligatorio")
     private Long pedidoId;
 
-    @NotNull
+    @NotNull(message = "El id usuario es obligatorio")
     private Long usuarioId;
 
     @NotNull
-    @Min(0)
+    @Min(value = 0, message = "El monto no puede ser negativo")
     private Double monto;
 
-    @NotBlank
+    @NotBlank(message = "Metodo de pago es obligatorio")
     private String metodoPago;
 }

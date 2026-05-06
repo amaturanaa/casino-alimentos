@@ -7,12 +7,13 @@ import lombok.Data;
 @Data
 public class DetallePedidoRequestDTO {
 
-    @NotNull
+    @NotNull(message = "El id del plato es obligatorio")
     private Long platoId;
 
-    @NotNull @Min(1)
+    @NotNull(message = "La cantidad es obligatoria")
+    @Min(value = 1, message = "El valor no puede ser cero, ni negativo")
     private Integer cantidad;
 
-    @NotNull @Min(0)
+    @NotNull @Min(value = 0, message = "El subtotal no puede ser negativo")
     private Double subTotal;
 }
