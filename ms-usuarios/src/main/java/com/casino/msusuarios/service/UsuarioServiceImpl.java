@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,14 +60,26 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public List<UsuarioResponseDTO> listarUsuarios() {
-        return usuarioRepository.findAll()
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+        List<UsuarioResponseDTO> lista = new ArrayList<>();
+        List<Usuario> usuarios = usuarioRepository.findAll();
+
+        for (Usuario u : usuarios) {
+            lista.add(mapToDTO(u));
+        }
+
+        return lista;
     }
 
     @Override
     public List<UsuarioResponseDTO> listarUsuariosActivos() {
-        return usuarioRepository.findByActivo(true)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+        List<UsuarioResponseDTO> lista = new ArrayList<>();
+        List<Usuario> usuarios = usuarioRepository.findByActivo(true);
+
+        for (Usuario u : usuarios) {
+            lista.add(mapToDTO(u));
+        }
+
+        return lista;
     }
 
     @Override
@@ -110,5 +122,4 @@ public class UsuarioServiceImpl implements UsuarioService {
         dto.setNombre_rol(u.getRol().getNombreRol());
         return dto;
     }
-
 }

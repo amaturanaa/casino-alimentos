@@ -6,6 +6,8 @@ import com.casino.msproveedores.model.Proveedor;
 import com.casino.msproveedores.repository.ProveedorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,21 +31,35 @@ public class ProveedorServiceImpl implements ProveedorService {
 
     @Override
     public ProveedorResponseDTO obtenerPorId(Long id) {
-        return proveedorRepository.findById(id)
-                .map(this::mapToDTO)
+        Proveedor proveedor = proveedorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Proveedor no encontrado"));
+        return mapToDTO(proveedor);
     }
 
     @Override
     public List<ProveedorResponseDTO> listar() {
-        return proveedorRepository.findAll()
-                .stream().map(this::mapToDTO).toList();
+        // Alternativa clásica con ciclo FOR
+        List<ProveedorResponseDTO> lista = new ArrayList<>();
+        List<Proveedor> proveedores = proveedorRepository.findAll();
+
+        for (Proveedor p : proveedores) {
+            lista.add(mapToDTO(p));
+        }
+
+        return lista;
     }
 
     @Override
     public List<ProveedorResponseDTO> listarActivos() {
-        return proveedorRepository.findByActivo(true)
-                .stream().map(this::mapToDTO).toList();
+        // Alternativa clásica con ciclo FOR
+        List<ProveedorResponseDTO> lista = new ArrayList<>();
+        List<Proveedor> proveedores = proveedorRepository.findByActivo(true);
+
+        for (Proveedor p : proveedores) {
+            lista.add(mapToDTO(p));
+        }
+
+        return lista;
     }
 
     @Override

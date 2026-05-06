@@ -8,9 +8,10 @@ import com.casino.msreservas.repository.ReservaRepository;
 import com.casino.msreservas.repository.TurnoDisponibleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,33 +45,54 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public ReservaResponseDTO obtenerPorId(Long id) {
-        return reservaRepository.findById(id)
-                .map(this::mapToDTO)
+        // Forma tradicional de obtener un Optional sin streams ni .map()
+        Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+        return mapToDTO(reserva);
     }
 
     @Override
     public List<ReservaResponseDTO> listarPorUsuario(Long usuarioId) {
-        return reservaRepository.findByUsuarioId(usuarioId)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+        List<ReservaResponseDTO> lista = new ArrayList<>();
+        List<Reserva> reservas = reservaRepository.findByUsuarioId(usuarioId);
+
+        for (Reserva r : reservas) {
+            lista.add(mapToDTO(r));
+        }
+        return lista;
     }
 
     @Override
     public List<ReservaResponseDTO> listarPorTurno(Long turnoId) {
-        return reservaRepository.findByTurno_IdTurno(turnoId)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+        List<ReservaResponseDTO> lista = new ArrayList<>();
+        List<Reserva> reservas = reservaRepository.findByTurno_IdTurno(turnoId);
+
+        for (Reserva r : reservas) {
+            lista.add(mapToDTO(r));
+        }
+        return lista;
     }
 
     @Override
     public List<ReservaResponseDTO> listarPorSede(Long sedeId) {
-        return reservaRepository.findBySedeId(sedeId)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+        List<ReservaResponseDTO> lista = new ArrayList<>();
+        List<Reserva> reservas = reservaRepository.findBySedeId(sedeId);
+
+        for (Reserva r : reservas) {
+            lista.add(mapToDTO(r));
+        }
+        return lista;
     }
 
     @Override
     public List<ReservaResponseDTO> listarPorEstado(String estado) {
-        return reservaRepository.findByEstado(estado)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+        List<ReservaResponseDTO> lista = new ArrayList<>();
+        List<Reserva> reservas = reservaRepository.findByEstado(estado);
+
+        for (Reserva r : reservas) {
+            lista.add(mapToDTO(r));
+        }
+        return lista;
     }
 
     @Override
@@ -91,8 +113,13 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public List<ReservaResponseDTO> listar() {
-        return reservaRepository.findAll()
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+        List<ReservaResponseDTO> lista = new ArrayList<>();
+        List<Reserva> reservas = reservaRepository.findAll();
+
+        for (Reserva r : reservas) {
+            lista.add(mapToDTO(r));
+        }
+        return lista;
     }
 
     private ReservaResponseDTO mapToDTO(Reserva r) {
