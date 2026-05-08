@@ -1,6 +1,5 @@
-package com.casino.msmenu.exception;
+package com.casino.msreservas.exception;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +11,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidationErrors(MethodArgumentNotValidException ex) {
@@ -55,9 +56,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
-
+    // Maneja recurso no encontrado
     @ExceptionHandler(jakarta.persistence.EntityNotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(jakarta.persistence.EntityNotFoundException ex) {
+
 
         ApiError error = new ApiError(
                 LocalDateTime.now(),
@@ -85,5 +87,4 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.internalServerError().body(error);
     }
-
 }

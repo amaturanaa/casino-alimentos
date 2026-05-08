@@ -1,5 +1,7 @@
 package com.casino.msinventario.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -14,9 +16,11 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidationErrors(MethodArgumentNotValidException ex) {
+        log.warn("Error de validación: {}", ex.getMessage());
 
         List<String> detalles = new ArrayList<>();
 
@@ -38,6 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiError> handleRuntimeException(RuntimeException ex) {
+        log.error("Error de negocio: {}", ex.getMessage());
 
         ApiError error = new ApiError(
                 LocalDateTime.now(),
@@ -68,6 +73,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneral(Exception ex) {
+        log.error("Error interno del servidor: {}", ex.getMessage());
 
         ApiError error = new ApiError(
                 LocalDateTime.now(),
