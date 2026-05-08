@@ -3,6 +3,7 @@ package com.casino.mscategoriasmenu.controller;
 import com.casino.mscategoriasmenu.dto.CategoriaMenuRequestDTO;
 import com.casino.mscategoriasmenu.dto.CategoriaMenuResponseDTO;
 import com.casino.mscategoriasmenu.service.CategoriaMenuService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class CategoriaMenuController {
 
     @PostMapping
     public ResponseEntity<CategoriaMenuResponseDTO> crear(
-            @RequestBody CategoriaMenuRequestDTO request) {
+            @Valid @RequestBody CategoriaMenuRequestDTO request) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(service.crear(request));
@@ -27,6 +28,7 @@ public class CategoriaMenuController {
 
     @GetMapping
     public ResponseEntity<List<CategoriaMenuResponseDTO>> listar() {
+
         return ResponseEntity.ok(service.listar());
     }
 
@@ -40,7 +42,7 @@ public class CategoriaMenuController {
     @PatchMapping("/{id}/estado")
     public ResponseEntity<CategoriaMenuResponseDTO> cambiarEstado(
             @PathVariable Long id,
-            @RequestParam Boolean estado) {
+            @RequestBody Boolean estado) {
 
         return ResponseEntity.ok(service.cambiarEstado(id, estado));
     }

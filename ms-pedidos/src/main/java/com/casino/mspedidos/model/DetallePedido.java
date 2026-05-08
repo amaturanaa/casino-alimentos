@@ -20,7 +20,7 @@ public class DetallePedido {
     @JoinColumn(name = "pedido_id", nullable = false)
     private Pedido pedido;
 
-    // Referencia a ms-menu
+
     @Column(nullable = false)
     private Long platoId;
 

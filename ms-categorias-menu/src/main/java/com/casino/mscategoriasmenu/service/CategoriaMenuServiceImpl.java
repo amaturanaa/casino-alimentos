@@ -7,6 +7,7 @@ import com.casino.mscategoriasmenu.repository.CategoriaMenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,20 +40,32 @@ public class CategoriaMenuServiceImpl implements CategoriaMenuService {
 
     @Override
     public List<CategoriaMenuResponseDTO> listar() {
-        return repository.findAll()
-                .stream()
-                .map(c -> new CategoriaMenuResponseDTO(
-                        c.getId(), c.getNombre(), c.getEstado()))
-                .toList();
+
+        List<CategoriaMenuResponseDTO> lista = new ArrayList<>();
+        List<CategoriaMenu> categorias = repository.findAll();
+
+        for (CategoriaMenu categoria : categorias) {
+            CategoriaMenuResponseDTO dto = new CategoriaMenuResponseDTO(
+                    categoria.getId(),
+                    categoria.getNombre(),
+                    categoria.getEstado()
+            );
+
+            lista.add(dto);
+        }
+
+        return lista;
     }
 
     @Override
     public CategoriaMenuResponseDTO obtenerPorId(Long id) {
         CategoriaMenu c = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+                .orElseThrow(() -> new RuntimeException("No existe una categoría con el id indicado"));
 
         return new CategoriaMenuResponseDTO(
-                c.getId(), c.getNombre(), c.getEstado());
+                c.getId(),
+                c.getNombre(),
+                c.getEstado());
     }
 
     @Override
@@ -64,16 +77,28 @@ public class CategoriaMenuServiceImpl implements CategoriaMenuService {
         repository.save(c);
 
         return new CategoriaMenuResponseDTO(
-                c.getId(), c.getNombre(), c.getEstado());
+                c.getId(),
+                c.getNombre(),
+                c.getEstado());
     }
 
     @Override
     public List<CategoriaMenuResponseDTO> listarPorEstado(Boolean estado) {
-        return repository.findByEstado(estado)
-                .stream()
-                .map(c -> new CategoriaMenuResponseDTO(
-                        c.getId(), c.getNombre(), c.getEstado()))
-                .toList();
+
+        List<CategoriaMenuResponseDTO> lista = new ArrayList<>();
+        List<CategoriaMenu> categorias = repository.findByEstado(estado);
+
+        for (CategoriaMenu categoria : categorias) {
+            CategoriaMenuResponseDTO dto = new CategoriaMenuResponseDTO(
+                    categoria.getId(),
+                    categoria.getNombre(),
+                    categoria.getEstado()
+            );
+
+            lista.add(dto);
+        }
+
+        return lista;
 
     }
 }

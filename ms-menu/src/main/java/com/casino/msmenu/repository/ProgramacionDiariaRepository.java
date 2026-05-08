@@ -15,4 +15,6 @@ public interface ProgramacionDiariaRepository extends JpaRepository<Programacion
     List<ProgramacionDiaria> findBySedeId(Long sedeId);
 
     List<ProgramacionDiaria> findByFechaAndSedeId(LocalDate fecha, Long sedeId);
+
+    
 }

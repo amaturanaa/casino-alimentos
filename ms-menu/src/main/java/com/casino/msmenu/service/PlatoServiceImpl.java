@@ -9,6 +9,7 @@ import com.casino.msmenu.repository.TipoPlatoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,14 +39,24 @@ public class PlatoServiceImpl implements PlatoService {
 
     @Override
     public List<PlatoResponseDTO> listar() {
-        return platoRepository.findAll().stream().map(this::mapToDTO).toList();
+
+        List<PlatoResponseDTO> lista = new ArrayList<>();
+        List<Plato> platos = platoRepository.findAll();
+
+        for (Plato plato : platos) {
+            lista.add(mapToDTO(plato));
+        }
+
+        return lista;
     }
 
     @Override
     public PlatoResponseDTO obtenerPorId(Long id) {
-        return platoRepository.findById(id)
-                .map(this::mapToDTO)
+
+        Plato plato = platoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Plato no encontrado"));
+
+        return mapToDTO(plato);
     }
 
     @Override
@@ -58,21 +69,39 @@ public class PlatoServiceImpl implements PlatoService {
 
     @Override
     public List<PlatoResponseDTO> listarPorTipo(Long tipoPlatoId) {
-        return platoRepository.findByTipoPlato_IdTipoPlato(tipoPlatoId)
-                .stream().map(this::mapToDTO).toList();
+
+        List<PlatoResponseDTO> lista = new ArrayList<>();
+        List<Plato> platos = platoRepository.findByTipoPlato_IdTipoPlato(tipoPlatoId);
+
+        for (Plato plato : platos) {
+            lista.add(mapToDTO(plato));
+        }
+
+        return lista;
     }
 
     @Override
     public List<PlatoResponseDTO> listarPorCategoria(Long categoriaId) {
-        return platoRepository.findByCategoriaId(categoriaId)
-                .stream().map(this::mapToDTO).toList();
+
+        List<PlatoResponseDTO> lista = new ArrayList<>();
+        List<Plato> platos = platoRepository.findByCategoriaId(categoriaId);
+
+        for (Plato plato : platos) {
+            lista.add(mapToDTO(plato));
+        }
+
+        return lista;
     }
 
     private PlatoResponseDTO mapToDTO(Plato p) {
         return new PlatoResponseDTO(
-                p.getIdPlato(), p.getNombrePlato(), p.getDescripcionPlato(),
-                p.getPrecioReferencial(), p.getTipoPlato().getNombreTipoPlato(),
-                p.getCategoriaId(), p.getDisponible()
+                p.getIdPlato(),
+                p.getNombrePlato(),
+                p.getDescripcionPlato(),
+                p.getPrecioReferencial(),
+                p.getTipoPlato().getNombreTipoPlato(),
+                p.getCategoriaId(),
+                p.getDisponible()
         );
     }
 }

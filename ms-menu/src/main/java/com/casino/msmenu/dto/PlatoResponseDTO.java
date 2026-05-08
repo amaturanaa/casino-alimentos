@@ -16,4 +16,6 @@ public class PlatoResponseDTO {
     private String nombreTipoPlato;
     private Long categoriaId;
     private Boolean disponible;
+
+
 }

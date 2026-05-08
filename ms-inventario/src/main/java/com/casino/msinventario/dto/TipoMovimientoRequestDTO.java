@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class TipoMovimientoRequestDTO {
 
-    @NotBlank
-    @Size(max = 50)
+    @NotBlank(message = "El nombre del tipo de movimiento es obligatorio")
+    @Size(max = 50, message = "El nombre dl tipo no puede superar los 50 caracteres")
     private String nombreTipoMovimiento;
 }

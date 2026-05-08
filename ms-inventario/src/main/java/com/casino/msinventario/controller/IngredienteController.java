@@ -4,6 +4,7 @@ import com.casino.msinventario.dto.IngredienteRequestDTO;
 import com.casino.msinventario.dto.IngredienteResponseDTO;
 import com.casino.msinventario.service.IngredienteService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class IngredienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<IngredienteResponseDTO> obtenerPorId(@PathVariable Long id) {
+    public ResponseEntity<IngredienteResponseDTO> obtenerPorId(@PathVariable @Min(value = 1, message = "El id debe ser mayor a 0") Long id) {
         return ResponseEntity.ok(ingredienteService.obtenerPorId(id));
     }
 
@@ -44,7 +45,7 @@ public class IngredienteController {
         return ResponseEntity.ok(ingredienteService.listarStockBajo());
     }
 
-    @GetMapping("/stock-bajo/sede/{sedeId}")
+    @GetMapping("/sede/{sedeId}/stock-bajo")
     public ResponseEntity<List<IngredienteResponseDTO>> listarStockBajoPorSede(
             @PathVariable Long sedeId) {
         return ResponseEntity.ok(ingredienteService.listarStockBajoPorSede(sedeId));

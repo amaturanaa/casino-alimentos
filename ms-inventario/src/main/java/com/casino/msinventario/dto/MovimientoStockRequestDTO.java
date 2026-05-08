@@ -14,9 +14,10 @@ public class MovimientoStockRequestDTO {
     @NotNull
     private Long tipoMovimientoId;
 
-    @NotNull @Min(0)
+    @NotNull(message = "La cantidad es obligatorio")
+    @Min(value = 0, message = "La cantidad no puede ser negativa")
     private Double cantidad;
 
-    @NotBlank
+    @NotBlank(message = "El motivo del movimiento es obligatorio")
     private String motivo;
 }

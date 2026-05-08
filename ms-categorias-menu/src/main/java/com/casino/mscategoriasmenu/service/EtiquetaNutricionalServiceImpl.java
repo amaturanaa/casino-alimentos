@@ -9,6 +9,7 @@ import com.casino.mscategoriasmenu.repository.EtiquetaNutricionalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,9 +44,11 @@ public class EtiquetaNutricionalServiceImpl implements EtiquetaNutricionalServic
 
     @Override
     public EtiquetaNutricionalResponseDTO obtenerPorCategoria(Long categoriaId) {
-        return etiquetaRepository.findByCategoriaMenu_Id(categoriaId)
-                .map(this::mapToDTO)
+
+        EtiquetaNutricional etiqueta = etiquetaRepository.findByCategoriaMenu_Id(categoriaId)
                 .orElseThrow(() -> new RuntimeException("Etiqueta no encontrada"));
+
+        return mapToDTO(etiqueta);
     }
 
     @Override
@@ -67,10 +70,15 @@ public class EtiquetaNutricionalServiceImpl implements EtiquetaNutricionalServic
 
     @Override
     public List<EtiquetaNutricionalResponseDTO> listar() {
-        return etiquetaRepository.findAll()
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
+
+        List<EtiquetaNutricionalResponseDTO>  lista = new ArrayList<>();
+        List<EtiquetaNutricional> etiquetas = etiquetaRepository.findAll();
+
+        for (EtiquetaNutricional etiqueta : etiquetas) {
+            lista.add(mapToDTO(etiqueta));
+        }
+
+        return lista;
     }
 
     private EtiquetaNutricionalResponseDTO mapToDTO(EtiquetaNutricional e) {

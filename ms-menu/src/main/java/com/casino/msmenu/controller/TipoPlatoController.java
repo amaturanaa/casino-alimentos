@@ -4,6 +4,7 @@ import com.casino.msmenu.dto.TipoPlatoRequestDTO;
 import com.casino.msmenu.dto.TipoPlatoResponseDTO;
 import com.casino.msmenu.service.TipoPlatoService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +26,13 @@ public class TipoPlatoController {
 
     @GetMapping
     public ResponseEntity<List<TipoPlatoResponseDTO>> listar() {
+
         return ResponseEntity.ok(tipoPlatoService.listar());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TipoPlatoResponseDTO> obtenerPorId(@PathVariable Long id) {
+    public ResponseEntity<TipoPlatoResponseDTO> obtenerPorId(
+            @PathVariable @NotNull(message = "El id del tipo de plato es obligatorio") Long id) {
         return ResponseEntity.ok(tipoPlatoService.obtenerPorId(id));
     }
 }

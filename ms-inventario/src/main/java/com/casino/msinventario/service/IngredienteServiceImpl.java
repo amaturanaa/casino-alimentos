@@ -7,6 +7,7 @@ import com.casino.msinventario.repository.IngredienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,43 +19,79 @@ public class IngredienteServiceImpl implements IngredienteService {
     @Override
     public IngredienteResponseDTO crear(IngredienteRequestDTO dto) {
         Ingrediente ingrediente = new Ingrediente(
-                null, dto.getNombreIngrediente(), dto.getSedeId(),
-                dto.getUnidadMedida(), dto.getStockActual(), dto.getStockMinimo()
+                null,
+                dto.getNombreIngrediente(),
+                dto.getSedeId(),
+                dto.getUnidadMedida(),
+                dto.getStockActual(),
+                dto.getStockMinimo()
         );
         return mapToDTO(ingredienteRepository.save(ingrediente));
     }
 
     @Override
     public IngredienteResponseDTO obtenerPorId(Long id) {
-        return ingredienteRepository.findById(id)
-                .map(this::mapToDTO)
+
+        Ingrediente ingrediente = ingredienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ingrediente no encontrado"));
+
+        return mapToDTO(ingrediente);
     }
 
     @Override
     public List<IngredienteResponseDTO> listar() {
-        return ingredienteRepository.findAll()
-                .stream().map(this::mapToDTO).toList();
+
+        List<IngredienteResponseDTO> lista = new ArrayList<>();
+        List<Ingrediente> ingredientes = ingredienteRepository.findAll();
+
+        for (Ingrediente ingrediente : ingredientes) {
+            lista.add(mapToDTO(ingrediente));
+        }
+
+        return lista;
     }
 
     @Override
     public List<IngredienteResponseDTO> listarPorSede(Long sedeId) {
-        return ingredienteRepository.findBySedeId(sedeId)
-                .stream().map(this::mapToDTO).toList();
+
+        List<IngredienteResponseDTO> lista = new ArrayList<>();
+        List<Ingrediente> ingredientes = ingredienteRepository.findBySedeId(sedeId);
+
+        for (Ingrediente ingrediente : ingredientes) {
+            lista.add(mapToDTO(ingrediente));
+        }
+
+        return lista;
     }
 
     @Override
     public List<IngredienteResponseDTO> listarStockBajo() {
-        return ingredienteRepository.findAll().stream()
-                .filter(i -> i.getStockActual() <= i.getStockMinimo())
-                .map(this::mapToDTO).toList();
+
+        List<IngredienteResponseDTO> lista = new ArrayList<>();
+        List<Ingrediente> ingredientes = ingredienteRepository.findAll();
+
+        for (Ingrediente ingrediente : ingredientes) {
+            if (ingrediente.getStockActual() <= ingrediente.getStockMinimo()) {
+                lista.add(mapToDTO(ingrediente));
+            }
+        }
+
+        return lista;
     }
 
     @Override
     public List<IngredienteResponseDTO> listarStockBajoPorSede(Long sedeId) {
-        return ingredienteRepository.findBySedeId(sedeId).stream()
-                .filter(i -> i.getStockActual() <= i.getStockMinimo())
-                .map(this::mapToDTO).toList();
+
+        List<IngredienteResponseDTO> lista = new ArrayList<>();
+        List<Ingrediente> ingredientes = ingredienteRepository.findBySedeId(sedeId);
+
+        for (Ingrediente ingrediente : ingredientes) {
+            if (ingrediente.getStockActual() <= ingrediente.getStockMinimo()) {
+                lista.add(mapToDTO(ingrediente));
+            }
+        }
+
+        return lista;
     }
 
     @Override
@@ -71,8 +108,12 @@ public class IngredienteServiceImpl implements IngredienteService {
 
     private IngredienteResponseDTO mapToDTO(Ingrediente i) {
         return new IngredienteResponseDTO(
-                i.getIdIngrediente(), i.getNombreIngrediente(), i.getSedeId(),
-                i.getUnidadMedida(), i.getStockActual(), i.getStockMinimo(),
+                i.getIdIngrediente(),
+                i.getNombreIngrediente(),
+                i.getSedeId(),
+                i.getUnidadMedida(),
+                i.getStockActual(),
+                i.getStockMinimo(),
                 i.getStockActual() <= i.getStockMinimo()
         );
     }

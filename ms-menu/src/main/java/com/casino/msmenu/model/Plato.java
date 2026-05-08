@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Plato")
+@Table(name = "Platos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,7 +29,7 @@ public class Plato {
     @JoinColumn(name = "tipo_plato_id", nullable = false)
     private TipoPlato tipoPlato;
 
-    // Referencia a ms-categorias-menu (solo Long, sin FK física)
+
     @Column(nullable = false)
     private Long categoriaId;
 
