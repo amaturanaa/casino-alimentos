@@ -42,7 +42,7 @@ public class CategoriaMenuController {
     @PatchMapping("/{id}/estado")
     public ResponseEntity<CategoriaMenuResponseDTO> cambiarEstado(
             @PathVariable Long id,
-            @RequestBody Boolean estado) {
+            @RequestParam Boolean estado) {
 
         return ResponseEntity.ok(service.cambiarEstado(id, estado));
     }
