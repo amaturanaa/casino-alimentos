@@ -1,12 +1,18 @@
 package com.casino.msreservas.service;
 
+import com.casino.msreservas.client.SucursalesClient;
+import com.casino.msreservas.client.UsuariosClient;
 import com.casino.msreservas.dto.ReservaRequestDTO;
 import com.casino.msreservas.dto.ReservaResponseDTO;
+import com.casino.msreservas.dto.SedeCasinoResponseDTO;
+import com.casino.msreservas.dto.UsuarioResponseDTO;
 import com.casino.msreservas.model.Reserva;
 import com.casino.msreservas.model.TurnoDisponible;
 import com.casino.msreservas.repository.ReservaRepository;
 import com.casino.msreservas.repository.TurnoDisponibleRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,18 +25,69 @@ public class ReservaServiceImpl implements ReservaService {
 
     private final ReservaRepository reservaRepository;
     private final TurnoDisponibleRepository turnoRepository;
+    private final UsuariosClient usuariosClient;
+    private final SucursalesClient sucursalesClient;
+
+    private static final Logger log = LoggerFactory.getLogger(ReservaServiceImpl.class);
+
 
     @Override
     public ReservaResponseDTO crear(ReservaRequestDTO dto) {
-        TurnoDisponible turno = turnoRepository.findById(dto.getTurnoId())
-                .orElseThrow(() -> new RuntimeException("Turno no encontrado"));
+        log.info("Creando reserva para usuario: {} en sede: {}", dto.getUsuarioId(), dto.getSedeId());
 
-        if (turno.getCuposRestantes() <= 0)
+        try {
+            UsuarioResponseDTO usuario = usuariosClient.obtenerUsuarioPorId(dto.getUsuarioId());
+            if (!usuario.getActivo()) {
+                log.warn("Usuario inactivo: {}", dto.getUsuarioId());
+                throw new RuntimeException("El usuario no esta activo en el sistema");
+            }
+            log.error("Error al verificar usuario: {}", usuario.getEmail());
+        } catch (RuntimeException e) {
+            if (e.getMessage() != null && e.getMessage().startsWith("El usuario")) {
+                throw e;
+            }
+            log.error("Error al verificar usuario: {}", e.getMessage());
+            throw new RuntimeException("No se pudo verificar el usuario con id: " + dto.getUsuarioId());
+        } catch (Exception ex) {
+            log.error("Error inesperado al verificar usuario: {}", ex.getMessage());
+            throw new RuntimeException("Error al verificar usuario: " + ex.getMessage());
+        }
+
+        try{
+            SedeCasinoResponseDTO sede = sucursalesClient.obtenerSedePorId(dto.getSedeId());
+            if (!sede.getEstadoOperativo()) {
+                log.warn("Sede no operativa: {}", dto.getSedeId());
+                throw new RuntimeException("La sede " + sede.getNombreSede() + " no esta operativa");
+            }
+            log.info("Sede verificada: {}", sede.getNombreSede());
+        } catch (RuntimeException e) {
+            if (e.getMessage() != null && e.getMessage().startsWith("La sede ")) {
+                throw e;
+            }
+            log.error("Error al verificar sede: {}", e.getMessage());
+            throw new RuntimeException("Error al verificar la sede con id: " + dto.getSedeId());
+        } catch (Exception e) {
+            log.error("Error inesperado al verificar sede: {}", e.getMessage());
+            throw new RuntimeException("Error al verificar la sede: " +  e.getMessage());
+        }
+
+
+        TurnoDisponible turno = turnoRepository.findById(dto.getTurnoId())
+                .orElseThrow(() -> {
+                    log.error("Turno no encontrado: {}", dto.getTurnoId());
+                    return new RuntimeException("Turno no encontrado");
+                });
+
+        if (turno.getCuposRestantes() <= 0) {
+            log.warn("Sin cupos en turno: {}", dto.getTurnoId());
             throw new RuntimeException("No hay cupos disponibles en este turno");
+        }
 
         if (reservaRepository.existsByUsuarioIdAndTurno_IdTurnoAndEstado(
-                dto.getUsuarioId(), dto.getTurnoId(), "ACTIVA"))
+                dto.getUsuarioId(), dto.getTurnoId(), "ACTIVA")) {
+            log.warn("Usuario {} ya tiene reserva activa en turno {}", dto.getUsuarioId(), dto.getTurnoId());
             throw new RuntimeException("El usuario ya tiene una reserva activa en este turno");
+        }
 
         turno.setCuposRestantes(turno.getCuposRestantes() - 1);
         turnoRepository.save(turno);
@@ -40,12 +97,14 @@ public class ReservaServiceImpl implements ReservaService {
                 dto.getSedeId(), LocalDateTime.now(), "ACTIVA"
         );
 
-        return mapToDTO(reservaRepository.save(reserva));
+
+        Reserva guardada =  reservaRepository.save(reserva);
+        log.info("Reserva creada con id: {}", guardada.getIdReserva());
+        return mapToDTO(guardada);
     }
 
     @Override
     public ReservaResponseDTO obtenerPorId(Long id) {
-        // Forma tradicional de obtener un Optional sin streams ni .map()
         Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
         return mapToDTO(reserva);
