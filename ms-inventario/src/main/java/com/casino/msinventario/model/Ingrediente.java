@@ -19,7 +19,6 @@ public class Ingrediente {
     @Column(nullable = false, length = 100)
     private String nombreIngrediente;
 
-
     @Column(nullable = false)
     private Long sedeId;
 

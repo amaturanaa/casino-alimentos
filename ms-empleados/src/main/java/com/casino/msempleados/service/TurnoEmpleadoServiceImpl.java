@@ -1,5 +1,7 @@
 package com.casino.msempleados.service;
 
+import com.casino.msempleados.client.SucursalesClient;
+import com.casino.msempleados.dto.SedeCasinoResponseDTO;
 import com.casino.msempleados.dto.TurnoEmpleadoRequestDTO;
 import com.casino.msempleados.dto.TurnoEmpleadoResponseDTO;
 import com.casino.msempleados.model.Empleado;
@@ -7,6 +9,8 @@ import com.casino.msempleados.model.TurnoEmpleado;
 import com.casino.msempleados.repository.EmpleadoRepository;
 import com.casino.msempleados.repository.TurnoEmpleadoRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,11 +22,44 @@ public class TurnoEmpleadoServiceImpl implements TurnoEmpleadoService {
 
     private final TurnoEmpleadoRepository turnoRepository;
     private final EmpleadoRepository empleadoRepository;
+    private final SucursalesClient sucursalesClient;
+
+    private static final Logger log = LoggerFactory.getLogger(TurnoEmpleadoServiceImpl.class);
 
     @Override
     public TurnoEmpleadoResponseDTO crear(TurnoEmpleadoRequestDTO dto) {
+        log.info("Creando turno para empleado: {} en sede: {}",
+                dto.getIdEmpleado(), dto.getSedeId());
+
         Empleado empleado = empleadoRepository.findById(dto.getIdEmpleado())
-                .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+                .orElseThrow(() -> {
+                    log.error("Empleado no encontrado: {}", dto.getIdEmpleado());
+                    return new RuntimeException("Empleado no encontrado");
+                });
+
+        if(!empleado.getActivo()) {
+            log.warn("Empleado inactivo: {}", dto.getIdEmpleado());
+            throw new RuntimeException("El empleado no está activo");
+        }
+
+        try {
+            SedeCasinoResponseDTO sede = sucursalesClient.obtennerSedePorId(dto.getSedeId());
+            if (!sede.getEstadoOperativo()) {
+                log.warn("Sede no operativa para turno: {}", dto.getSedeId());
+                throw new RuntimeException("La sede "+ sede.getNombreSede()+" no está operativa");
+            }
+            log.info("Sede verificada: {}", sede.getNombreSede());
+        }catch (RuntimeException e) {
+            if (e.getMessage() != null && e.getMessage().startsWith("La sede")) {
+                throw e;
+            }
+            log.error("Error al verificar sede: {}", e.getMessage());
+            throw new RuntimeException("No se pudo verificar la sede con id: "+ dto.getSedeId());
+        }catch (Exception e) {
+            log.error("Error inesperado al verificar sede: {}", e.getMessage());
+            throw new RuntimeException("No se pudo verificar sede: "+ e.getMessage());
+
+        }
 
         TurnoEmpleado turno = new TurnoEmpleado();
         turno.setEmpleado(empleado);
@@ -32,7 +69,9 @@ public class TurnoEmpleadoServiceImpl implements TurnoEmpleadoService {
         turno.setHoraSalida(dto.getHoraSalida());
         turno.setTipoTurno(dto.getTipoTurno());
 
-        return mapToDTO(turnoRepository.save(turno));
+        TurnoEmpleado guardado = turnoRepository.save(turno);
+        log.info("Turno creado con id: {}", guardado.toString());
+        return mapToDTO(guardado);
     }
 
     @Override
