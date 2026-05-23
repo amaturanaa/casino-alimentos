@@ -9,13 +9,13 @@ import com.casino.msmenu.model.TipoPlato;
 import com.casino.msmenu.repository.PlatoRepository;
 import com.casino.msmenu.repository.TipoPlatoRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PlatoServiceImpl implements PlatoService {
@@ -23,9 +23,6 @@ public class PlatoServiceImpl implements PlatoService {
     private final PlatoRepository platoRepository;
     private final TipoPlatoRepository tipoPlatoRepository;
     private final CategoriasMenuClient categoriasMenuClient;
-
-    private static final Logger log = LoggerFactory.getLogger(PlatoServiceImpl.class);
-
 
     @Override
     public PlatoResponseDTO crear(PlatoRequestDTO dto) {

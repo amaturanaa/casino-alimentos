@@ -7,11 +7,13 @@ import com.casino.mscategoriasmenu.model.EtiquetaNutricional;
 import com.casino.mscategoriasmenu.repository.CategoriaMenuRepository;
 import com.casino.mscategoriasmenu.repository.EtiquetaNutricionalRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EtiquetaNutricionalServiceImpl implements EtiquetaNutricionalService {

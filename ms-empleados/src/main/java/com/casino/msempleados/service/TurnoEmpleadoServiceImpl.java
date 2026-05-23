@@ -9,13 +9,13 @@ import com.casino.msempleados.model.TurnoEmpleado;
 import com.casino.msempleados.repository.EmpleadoRepository;
 import com.casino.msempleados.repository.TurnoEmpleadoRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TurnoEmpleadoServiceImpl implements TurnoEmpleadoService {
@@ -24,7 +24,6 @@ public class TurnoEmpleadoServiceImpl implements TurnoEmpleadoService {
     private final EmpleadoRepository empleadoRepository;
     private final SucursalesClient sucursalesClient;
 
-    private static final Logger log = LoggerFactory.getLogger(TurnoEmpleadoServiceImpl.class);
 
     @Override
     public TurnoEmpleadoResponseDTO crear(TurnoEmpleadoRequestDTO dto) {

@@ -6,12 +6,14 @@ import com.casino.mssucursales.model.EmpleadoSede;
 import com.casino.mssucursales.model.EmpleadoSedeId;
 import com.casino.mssucursales.repository.EmpleadoSedeRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmpleadoSedeServiceImpl implements EmpleadoSedeService {

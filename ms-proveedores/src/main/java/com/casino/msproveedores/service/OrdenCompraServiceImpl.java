@@ -13,18 +13,17 @@ import com.casino.msproveedores.repository.DetalleOrdenCompraRepository;
 import com.casino.msproveedores.repository.OrdenCompraRepository;
 import com.casino.msproveedores.repository.ProveedorRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrdenCompraServiceImpl implements OrdenCompraService {
 
-    private static final Logger log = LoggerFactory.getLogger(OrdenCompraServiceImpl.class);
 
     private final OrdenCompraRepository ordenCompraRepository;
     private final DetalleOrdenCompraRepository detalleRepository;

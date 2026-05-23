@@ -5,12 +5,14 @@ import com.casino.msreservas.dto.TurnoDisponibleResponseDTO;
 import com.casino.msreservas.model.TurnoDisponible;
 import com.casino.msreservas.repository.TurnoDisponibleRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TurnoDisponibleServiceImpl implements TurnoDisponibleService {
