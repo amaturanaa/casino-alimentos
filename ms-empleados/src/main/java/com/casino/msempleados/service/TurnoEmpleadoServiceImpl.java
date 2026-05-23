@@ -75,6 +75,7 @@ public class TurnoEmpleadoServiceImpl implements TurnoEmpleadoService {
 
     @Override
     public TurnoEmpleadoResponseDTO obtenerPorId(Long id) {
+        log.info("Buscando turno con id: {}", id);
         TurnoEmpleado turno = turnoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Turno no encontrado"));
         return mapToDTO(turno);
@@ -82,6 +83,7 @@ public class TurnoEmpleadoServiceImpl implements TurnoEmpleadoService {
 
     @Override
     public List<TurnoEmpleadoResponseDTO> listar() {
+        log.info("Listando todos los turnos");
         List<TurnoEmpleadoResponseDTO> lista = new ArrayList<>();
         List<TurnoEmpleado> turnos = turnoRepository.findAll();
         for (TurnoEmpleado t : turnos) {
@@ -92,6 +94,7 @@ public class TurnoEmpleadoServiceImpl implements TurnoEmpleadoService {
 
     @Override
     public List<TurnoEmpleadoResponseDTO> listarPorEmpleado(Long idEmpleado) {
+        log.info("Listando turnos para empleados: {}", idEmpleado);
         List<TurnoEmpleadoResponseDTO> lista = new ArrayList<>();
         List<TurnoEmpleado> turnos = turnoRepository.findByEmpleado_IdEmpleado(idEmpleado);
         for (TurnoEmpleado t : turnos) {
@@ -102,6 +105,7 @@ public class TurnoEmpleadoServiceImpl implements TurnoEmpleadoService {
 
     @Override
     public List<TurnoEmpleadoResponseDTO> listarPorSede(Long sedeId) {
+        log.info("Listando turnos para sede: {}", sedeId);
         List<TurnoEmpleadoResponseDTO> lista = new ArrayList<>();
         List<TurnoEmpleado> turnos = turnoRepository.findBySedeId(sedeId);
         for (TurnoEmpleado t : turnos) {
@@ -112,6 +116,7 @@ public class TurnoEmpleadoServiceImpl implements TurnoEmpleadoService {
 
     @Override
     public List<TurnoEmpleadoResponseDTO> listarPorFecha(LocalDate fecha) {
+        log.info("Listando turnos para fecha: {}", fecha);
         List<TurnoEmpleadoResponseDTO> lista = new ArrayList<>();
         List<TurnoEmpleado> turnos = turnoRepository.findByFecha(fecha);
         for (TurnoEmpleado t : turnos) {
@@ -122,6 +127,7 @@ public class TurnoEmpleadoServiceImpl implements TurnoEmpleadoService {
 
     @Override
     public List<TurnoEmpleadoResponseDTO> listarPorSedeYFecha(Long sedeId, LocalDate fecha) {
+        log.info("Listando turnos para sede: {} fecha: {}", sedeId, fecha);
         List<TurnoEmpleadoResponseDTO> lista = new ArrayList<>();
         List<TurnoEmpleado> turnos = turnoRepository.findBySedeIdAndFecha(sedeId, fecha);
         for (TurnoEmpleado t : turnos) {
@@ -132,6 +138,7 @@ public class TurnoEmpleadoServiceImpl implements TurnoEmpleadoService {
 
     @Override
     public List<TurnoEmpleadoResponseDTO> listarPorTipo(String tipoTurno) {
+        log.info("Listando turnos por tipo: {}", tipoTurno);
         List<TurnoEmpleadoResponseDTO> lista = new ArrayList<>();
         // Corrección: se quitó la palabra "String" dentro del paréntesis
         List<TurnoEmpleado> turnos = turnoRepository.findByTipoTurno(tipoTurno);
@@ -143,6 +150,7 @@ public class TurnoEmpleadoServiceImpl implements TurnoEmpleadoService {
 
     @Override
     public void eliminar(Long id) {
+        log.info("Eliminando turno con id: {}", id);
         TurnoEmpleado turno = turnoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Turno no encontrado"));
         turnoRepository.delete(turno);

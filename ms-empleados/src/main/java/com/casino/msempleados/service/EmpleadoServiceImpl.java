@@ -75,6 +75,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     @Override
     public List<EmpleadoResponseDTO> listarPorCargo(String cargo) {
+        log.info("Listando empleados por cargo: {}", cargo);
         List<EmpleadoResponseDTO> lista = new ArrayList<>();
         List<Empleado> empleados = empleadoRepository.findByCargo(cargo);
         for (Empleado e : empleados) {

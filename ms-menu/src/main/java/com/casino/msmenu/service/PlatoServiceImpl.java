@@ -95,7 +95,7 @@ public class PlatoServiceImpl implements PlatoService {
 
     @Override
     public List<PlatoResponseDTO> listarPorTipo(Long tipoPlatoId) {
-
+        log.info("Listando platos por tipo: {}", tipoPlatoId);
         List<PlatoResponseDTO> lista = new ArrayList<>();
         List<Plato> platos = platoRepository.findByTipoPlato_IdTipoPlato(tipoPlatoId);
 
@@ -108,7 +108,7 @@ public class PlatoServiceImpl implements PlatoService {
 
     @Override
     public List<PlatoResponseDTO> listarPorCategoria(Long categoriaId) {
-
+        log.info("Listando platos por categoria: {}", categoriaId);
         List<PlatoResponseDTO> lista = new ArrayList<>();
         List<Plato> platos = platoRepository.findByCategoriaId(categoriaId);
 

@@ -103,6 +103,7 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public ReservaResponseDTO obtenerPorId(Long id) {
+        log.info("Buscando reserva con id: {}", id);
         Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
         return mapToDTO(reserva);
@@ -110,6 +111,7 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public List<ReservaResponseDTO> listarPorUsuario(Long usuarioId) {
+        log.info("Listando reservas para usuario: {}", usuarioId);
         List<ReservaResponseDTO> lista = new ArrayList<>();
         List<Reserva> reservas = reservaRepository.findByUsuarioId(usuarioId);
 
@@ -121,6 +123,7 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public List<ReservaResponseDTO> listarPorTurno(Long turnoId) {
+        log.info("Listando reservas para turno: {}", turnoId);
         List<ReservaResponseDTO> lista = new ArrayList<>();
         List<Reserva> reservas = reservaRepository.findByTurno_IdTurno(turnoId);
 
@@ -132,6 +135,7 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public List<ReservaResponseDTO> listarPorSede(Long sedeId) {
+        log.info("Listando reservas para sede: {}", sedeId);
         List<ReservaResponseDTO> lista = new ArrayList<>();
         List<Reserva> reservas = reservaRepository.findBySedeId(sedeId);
 
@@ -143,6 +147,7 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public List<ReservaResponseDTO> listarPorEstado(String estado) {
+        log.info("Listando reservas con estado: {}", estado);
         List<ReservaResponseDTO> lista = new ArrayList<>();
         List<Reserva> reservas = reservaRepository.findByEstado(estado);
 
@@ -154,6 +159,7 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public ReservaResponseDTO cancelar(Long id) {
+        log.info("Cancelando reserva con id: {}", id);
         Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
 
@@ -170,6 +176,7 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public List<ReservaResponseDTO> listar() {
+        log.info("Listando todas las reservas");
         List<ReservaResponseDTO> lista = new ArrayList<>();
         List<Reserva> reservas = reservaRepository.findAll();
 
