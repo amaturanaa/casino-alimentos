@@ -1,0 +1,3 @@
+-- Las transacciones se generan en tiempo real mediante la API REST
+-- No se insertan datos iniciales ya que dependen de pedidos
+-- procesados dinamicamente en el sistema
