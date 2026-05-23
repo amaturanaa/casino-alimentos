@@ -78,7 +78,7 @@ public class IngredienteServiceImpl implements IngredienteService {
 
     @Override
     public List<IngredienteResponseDTO> listarPorSede(Long sedeId) {
-
+        log.info("Listando ingredientes para sede: {}", sedeId);
         List<IngredienteResponseDTO> lista = new ArrayList<>();
         List<Ingrediente> ingredientes = ingredienteRepository.findBySedeId(sedeId);
 
@@ -121,6 +121,7 @@ public class IngredienteServiceImpl implements IngredienteService {
 
     @Override
     public IngredienteResponseDTO actualizar(Long id, IngredienteRequestDTO dto) {
+        log.info("Actualizando ingrediente con id: {}", id);
         Ingrediente ingrediente = ingredienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ingrediente no encontrado"));
         ingrediente.setNombreIngrediente(dto.getNombreIngrediente());
