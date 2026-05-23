@@ -7,21 +7,19 @@ import com.casino.msinventario.dto.SedeCasinoResponseDTO;
 import com.casino.msinventario.model.Ingrediente;
 import com.casino.msinventario.repository.IngredienteRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class IngredienteServiceImpl implements IngredienteService {
 
     private final IngredienteRepository ingredienteRepository;
     private final SucursalesClient  sucursalesClient;
-
-    private static final Logger log = LoggerFactory.getLogger(IngredienteServiceImpl.class);
 
     @Override
     public IngredienteResponseDTO crear(IngredienteRequestDTO dto) {

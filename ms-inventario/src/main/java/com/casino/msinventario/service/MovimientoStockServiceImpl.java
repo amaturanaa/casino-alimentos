@@ -9,12 +9,14 @@ import com.casino.msinventario.repository.IngredienteRepository;
 import com.casino.msinventario.repository.MovimientoStockRepository;
 import com.casino.msinventario.repository.TipoMovimientoRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MovimientoStockServiceImpl implements MovimientoStockService {

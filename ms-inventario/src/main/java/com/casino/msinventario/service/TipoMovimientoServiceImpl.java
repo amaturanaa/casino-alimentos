@@ -5,11 +5,13 @@ import com.casino.msinventario.dto.TipoMovimientoResponseDTO;
 import com.casino.msinventario.model.TipoMovimiento;
 import com.casino.msinventario.repository.TipoMovimientoRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TipoMovimientoServiceImpl implements TipoMovimientoService{

@@ -11,14 +11,14 @@ import com.casino.msreservas.model.TurnoDisponible;
 import com.casino.msreservas.repository.ReservaRepository;
 import com.casino.msreservas.repository.TurnoDisponibleRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReservaServiceImpl implements ReservaService {
@@ -27,8 +27,6 @@ public class ReservaServiceImpl implements ReservaService {
     private final TurnoDisponibleRepository turnoRepository;
     private final UsuariosClient usuariosClient;
     private final SucursalesClient sucursalesClient;
-
-    private static final Logger log = LoggerFactory.getLogger(ReservaServiceImpl.class);
 
 
     @Override

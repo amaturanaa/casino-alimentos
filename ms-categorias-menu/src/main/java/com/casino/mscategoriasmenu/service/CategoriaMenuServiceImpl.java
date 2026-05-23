@@ -5,11 +5,13 @@ import com.casino.mscategoriasmenu.dto.CategoriaMenuResponseDTO;
 import com.casino.mscategoriasmenu.model.CategoriaMenu;
 import com.casino.mscategoriasmenu.repository.CategoriaMenuRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CategoriaMenuServiceImpl implements CategoriaMenuService {
