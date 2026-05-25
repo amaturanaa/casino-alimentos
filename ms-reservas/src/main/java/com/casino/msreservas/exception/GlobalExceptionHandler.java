@@ -1,30 +1,35 @@
 package com.casino.msreservas.exception;
 
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
 
+// Manejador global de excepciones para todos los controllers del microservicio
+// @RestControllerAdvice intercepta excepciones lanzadas por cualquier controller
+// Centraliza el manejo de errores evitando try/catch repetido en cada controller
+// Garantiza respuestas de error consistentes con ResponseEntity y códigos HTTP correctos
+// @Slf4j genera automáticamente el logger mediante Lombok
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
-
+    // Maneja errores de validación Bean Validation (@Valid en controllers)
+    // Se activa cuando un campo del DTO no cumple las anotaciones de validación
+    // Retorna 400 Bad Request con lista detallada de campos inválidos
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleValidationErrors(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiError> handleValidationErrors(
+            MethodArgumentNotValidException ex) {
         log.warn("Error de validación: {}", ex.getMessage());
 
+        // Recorre todos los errores de campo y los agrega a la lista de detalles
         List<String> detalles = new ArrayList<>();
-
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             detalles.add(error.getField() + ": " + error.getDefaultMessage());
         }
@@ -40,7 +45,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
-
+    // Maneja errores de lógica de negocio lanzados desde el Service
+    // Ejemplo: usuario inactivo, sede no operativa, sin cupos disponibles
+    // Retorna 400 Bad Request con mensaje descriptivo del error
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiError> handleRuntimeException(RuntimeException ex) {
         log.error("Error de negocio: {}", ex.getMessage());
@@ -56,10 +63,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
-    // Maneja recurso no encontrado
+    // Maneja errores de recurso no encontrado en la base de datos
+    // Se activa cuando JPA lanza EntityNotFoundException
+    // Retorna 404 Not Found con mensaje descriptivo
     @ExceptionHandler(jakarta.persistence.EntityNotFoundException.class)
-    public ResponseEntity<ApiError> handleNotFound(jakarta.persistence.EntityNotFoundException ex) {
-
+    public ResponseEntity<ApiError> handleNotFound(
+            jakarta.persistence.EntityNotFoundException ex) {
 
         ApiError error = new ApiError(
                 LocalDateTime.now(),
@@ -72,7 +81,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-
+    // Maneja cualquier error inesperado no capturado por los handlers anteriores
+    // Retorna 500 Internal Server Error ocultando detalles internos al cliente
+    // El log registra el error completo para diagnóstico interno
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneral(Exception ex) {
         log.error("Error interno del servidor: {}", ex.getMessage());
