@@ -3,6 +3,7 @@ package com.casino.mssucursales.controller;
 import com.casino.mssucursales.dto.SedeCasinoRequestDTO;
 import com.casino.mssucursales.dto.SedeCasinoResponseDTO;
 import com.casino.mssucursales.service.SedeCasinoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class SedeCasinoController {
     // HttpStatus.CREATED (201) indica creación exitosa de un nuevo recurso
     @PostMapping
     public ResponseEntity<SedeCasinoResponseDTO> crear(
-            @RequestBody SedeCasinoRequestDTO request) {
+            @Valid @RequestBody SedeCasinoRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(sedeCasinoService.crearSede(request));
     }
