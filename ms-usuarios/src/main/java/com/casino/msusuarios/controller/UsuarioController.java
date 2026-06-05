@@ -55,7 +55,7 @@ public class UsuarioController {
             description = "Retorna la lista completa de usuarios registrados"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida")
+            @ApiResponse(responseCode = "200", description = "Lista de usuarios registrados")
     })
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDTO>> listarUsuarios() {
@@ -69,7 +69,7 @@ public class UsuarioController {
             description = "Retorna solo los usuarios activos. Consumido por ms-reservas via Feign"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de usuarios activos obtenida")
+            @ApiResponse(responseCode = "200", description = "Lista de usuarios activos")
     })
     @GetMapping("/activos")
     public ResponseEntity<List<UsuarioResponseDTO>> listarActivos() {
@@ -134,7 +134,7 @@ public class UsuarioController {
     // No elimina el registro físicamente — solo cambia activo a false
     @Operation(
             summary = "Eliminar usuario",
-            description = "Desactiva un usuario (baja lógica). No elimina el registro físicamente, solo cambia su estado a inactivo"
+            description = "Desactiva un usuario. No elimina el registro físicamente, solo cambia su estado a inactivo"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Usuario desactivado exitosamente, sin contenido"),
