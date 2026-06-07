@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 // Controlador REST que expone los endpoints del recurso Rol
-// Sigue el patrón CSR: solo orquesta llamadas al Repository, sin lógica de negocio
 // Los roles definen los permisos de acceso de los usuarios del sistema
 // Ejemplo: ROLE_ADMIN, ROLE_OPERADOR, ROLE_CLIENTE
 // @Tag agrupa todos los endpoints de este controller bajo "Roles"
@@ -57,7 +56,7 @@ public class RolController {
             description = "Retorna la lista completa de roles registrados"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de roles obtenida")
+            @ApiResponse(responseCode = "200", description = "Lista de roles registrados")
     })
     @GetMapping
     public ResponseEntity<List<Rol>> listarRoles() {

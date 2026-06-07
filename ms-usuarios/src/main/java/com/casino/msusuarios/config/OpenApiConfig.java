@@ -18,6 +18,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("API ms-usuarios")
                         .version("1.0")
-                        .description("Microservicio de gestión de usuarios del casino"));
+                        .description("Gestión de usuarios del casino"));
     }
 }
