@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients(basePackages = "com.casino.mspagos.client")
-@EnableDiscoveryClient // <-- Crucial para que Eureka descubra y registre este módulo
+@EnableDiscoveryClient
 public class MsPagosApplication {
 
     public static void main(String[] args) {

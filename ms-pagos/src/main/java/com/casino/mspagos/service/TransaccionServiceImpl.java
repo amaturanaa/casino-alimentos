@@ -1,5 +1,7 @@
 package com.casino.mspagos.service;
 
+import com.casino.mspagos.client.PedidosClient;
+import com.casino.mspagos.dto.PedidoResponseDTO;
 import com.casino.mspagos.dto.TransaccionRequestDTO;
 import com.casino.mspagos.dto.TransaccionResponseDTO;
 import com.casino.mspagos.model.Transaccion;
@@ -12,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Implementación del Service para la entidad Transaccion
-// Contiene toda la lógica de negocio relacionada a pagos del sistema
 // @Slf4j genera automáticamente el logger mediante Lombok
 // @Service marca esta clase como componente de la capa de servicio
 // @RequiredArgsConstructor genera constructor con los campos final
@@ -23,6 +24,10 @@ public class TransaccionServiceImpl implements TransaccionService {
 
     // Repositorio JPA inyectado mediante constructor
     private final TransaccionRepository transaccionRepository;
+
+    // Cliente Feign para comunicación síncrona con ms-pedidos
+    // Verifica que el pedido exista y pertenezca al usuario antes de procesar el pago
+    private final PedidosClient pedidosClient;
 
     @Override
     public TransaccionResponseDTO procesarPago(TransaccionRequestDTO dto) {
@@ -41,6 +46,34 @@ public class TransaccionServiceImpl implements TransaccionService {
         if (!metodosValidos.contains(dto.getMetodoPago())) {
             log.warn("Método de pago inválido: {}", dto.getMetodoPago());
             throw new RuntimeException("Método de pago inválido");
+        }
+
+        // Comunicación Feign con ms-pedidos para verificar el pedido
+        // try/catch diferenciado: RuntimeException de negocio relanza limpio,
+        // Exception captura errores de red o de comunicación
+        try {
+            PedidoResponseDTO pedido = pedidosClient.obtenerPedidoPorId(dto.getPedidoId());
+
+            // Verifica que el pedido pertenezca al usuario que está pagando
+            if (!pedido.getUsuarioId().equals(dto.getUsuarioId())) {
+                log.warn("El pedido {} no pertenece al usuario {}",
+                        dto.getPedidoId(), dto.getUsuarioId());
+                throw new RuntimeException("El pedido no pertenece al usuario indicado");
+            }
+            log.info("Pedido verificado: {} del usuario {}",
+                    pedido.getIdPedido(), pedido.getUsuarioId());
+        } catch (RuntimeException e) {
+            // Si es error de negocio (pedido no pertenece) se relanza sin modificar
+            if (e.getMessage() != null
+                    && e.getMessage().startsWith("El pedido no pertenece")) {
+                throw e;
+            }
+            log.error("Error al verificar el pedido en ms-pedidos: {}", e.getMessage());
+            throw new RuntimeException("No se pudo verificar el pedido con id: "
+                    + dto.getPedidoId());
+        } catch (Exception e) {
+            log.error("Error inesperado al verificar el pedido: {}", e.getMessage());
+            throw new RuntimeException("No se pudo verificar el pedido: " + e.getMessage());
         }
 
         // Construcción de la entidad Transaccion desde el DTO de entrada
