@@ -144,9 +144,9 @@ spring.profiles.active=dev
 
 ## Pruebas Unitarias
 
-El proyecto incluye pruebas de integración con **JUnit 5** y `@SpringBootTest` para 10 microservicios (5 por integrante). Cada microservicio tiene 3 pruebas que validan las reglas de negocio más críticas del dominio, ejecutadas contra una base de datos de prueba aislada.
+El proyecto incluye pruebas de integración con **JUnit 5** y `@SpringBootTest` para 10 microservicios. Cada microservicio tiene 3 pruebas que validan las reglas de negocio más críticas del dominio, ejecutadas contra una base de datos de prueba aislada.
 
-Para mayor detalle ver [TESTING_PLAN.md](./TESTING_PLAN.md).
+
 
 ### Ejecutar pruebas
 
