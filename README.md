@@ -26,7 +26,7 @@ El sistema está compuesto por 12 servicios organizados bajo una arquitectura de
 | Microservicio | Puerto | Base de Datos | Descripción |
 |---|---|---|---|
 | eureka-server | 8761 | — | Registro y descubrimiento de servicios |
-| api-gateway | 80 | — | Punto de entrada único al sistema |
+| api-gateway | 8080 | — | Punto de entrada único al sistema |
 | ms-usuarios | 8082 | db_usuarios | Gestión de usuarios y roles del sistema |
 | ms-sucursales | 8083 | db_sucursales | Gestión de sedes del casino |
 | ms-menu | 8084 | db_menu | Gestión de platos, tipos y programación diaria |
@@ -40,7 +40,7 @@ El sistema está compuesto por 12 servicios organizados bajo una arquitectura de
 
 ---
 
-## Rutas principales del API Gateway (puerto 80)
+## Rutas principales del API Gateway (puerto 8080)
 
 | Ruta | Microservicio destino |
 |---|---|
@@ -107,7 +107,7 @@ Cada microservicio expone su documentación en `/swagger-ui.html`:
 3. **Arrancar los servicios en este orden:**
    ```
    1. eureka-server       (puerto 8761)
-   2. api-gateway         (puerto 80)
+   2. api-gateway         (puerto 8080)
    3. ms-usuarios         (puerto 8082)
    4. ms-sucursales       (puerto 8083)
    5. ms-categorias-menu  (puerto 8087)
