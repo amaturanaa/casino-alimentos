@@ -14,7 +14,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 // Pruebas de integración para PedidoService
-// Solo se prueban métodos de lectura — crearPedido usa Feign hacia ms-sucursales y ms-menu
 @Slf4j
 @SpringBootTest
 @ActiveProfiles("test")

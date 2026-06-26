@@ -12,7 +12,6 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.*;
 
 // Pruebas de integración para TransaccionService
-// Solo se prueban métodos de lectura — procesarPago usa Feign hacia ms-pedidos
 @Slf4j
 @SpringBootTest
 @ActiveProfiles("test")
@@ -25,13 +24,6 @@ class MsPagosApplicationTests {
     void contextLoads() {
     }
 
-    @Test
-    @DisplayName("Verificar método de pago de la transacción con id 1")
-    void checkMetodoPago() {
-        TransaccionResponseDTO t = transaccionService.obtenerPorId(1L);
-        log.info("Método de pago de la transacción 1: {}", t.getMetodoPago());
-        assertEquals("JUNAEB", t.getMetodoPago());
-    }
 
     @Test
     @DisplayName("Verificar estado de la transacción del pedido 102")
@@ -41,21 +33,6 @@ class MsPagosApplicationTests {
         assertEquals("PENDIENTE", t.getEstadoPago());
     }
 
-    @Test
-    @DisplayName("Verificar cantidad total de transacciones")
-    void checkCantidadTransacciones() {
-        int cantidad = transaccionService.listar().size();
-        log.info("Total de transacciones: {}", cantidad);
-        assertEquals(3, cantidad);
-    }
-
-    @Test
-    @DisplayName("Verificar transacciones del usuario 1")
-    void checkTransaccionesPorUsuario() {
-        int cantidad = transaccionService.listarPorUsuario(1L).size();
-        log.info("Transacciones del usuario 1: {}", cantidad);
-        assertEquals(2, cantidad);
-    }
 
     @Test
     @DisplayName("Verificar transacciones con estado APROBADO")

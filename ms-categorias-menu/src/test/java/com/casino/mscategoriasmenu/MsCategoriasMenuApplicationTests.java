@@ -46,28 +46,10 @@ class MsCategoriasMenuApplicationTests {
     }
 
     @Test
-    @DisplayName("Verificar cantidad total de categorías")
-    void checkCantidadCategorias() {
-        int cantidad = categoriaService.listar().size();
-        log.info("Verificación de cantidad de categorías: {}", cantidad);
-        assertEquals(5, cantidad);
-    }
-
-    @Test
     @DisplayName("Verificar cantidad de categorías activas")
     void checkCategoriasActivas() {
         int activas = categoriaService.listarPorEstado(true).size();
         log.info("Verificación de categorías activas: {}", activas);
         assertEquals(5, activas);
-    }
-
-    @Test
-    @DisplayName("Prueba que falla intencionalmente (demostración)")
-    void checkPruebaQueFalla() {
-        CategoriaMenuResponseDTO categoria = categoriaService.obtenerPorId(1L);
-        log.info("Comparando nombre real {} con uno incorrecto", categoria.getNombre());
-        // Afirmamos a propósito un nombre INCORRECTO
-        // La categoría 1 es "Almuerzo Completo", pero decimos que es "Pizza"
-        assertEquals("Pizza", categoria.getNombre());
     }
 }

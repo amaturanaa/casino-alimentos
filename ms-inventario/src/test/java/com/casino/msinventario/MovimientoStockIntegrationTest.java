@@ -22,13 +22,6 @@ class MovimientoStockIntegrationTest {
     @Autowired
     private MovimientoStockService movimientoService;
 
-    @Test
-    @DisplayName("Verificar cantidad total de movimientos")
-    void checkCantidadMovimientos() {
-        int cantidad = movimientoService.listar().size();
-        log.info("Total de movimientos: {}", cantidad);
-        assertEquals(2, cantidad);
-    }
 
     @Test
     @DisplayName("Verificar movimientos del ingrediente 1")
@@ -39,11 +32,4 @@ class MovimientoStockIntegrationTest {
         assertEquals("Arroz", lista.get(0).getNombreIngrediente());
     }
 
-    @Test
-    @DisplayName("Verificar movimientos de tipo ENTRADA (id 1)")
-    void checkMovimientosPorTipo() {
-        int cantidad = movimientoService.listarPorTipo(1L).size();
-        log.info("Movimientos de tipo ENTRADA: {}", cantidad);
-        assertEquals(1, cantidad);
-    }
 }

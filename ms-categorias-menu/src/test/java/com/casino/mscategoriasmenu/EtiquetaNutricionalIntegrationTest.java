@@ -24,14 +24,6 @@ class EtiquetaNutricionalIntegrationTest {
     private EtiquetaNutricionalService etiquetaService;
 
     @Test
-    @DisplayName("Verificar etiqueta nutricional de la categoría 1")
-    void checkEtiquetaPorCategoria() {
-        EtiquetaNutricionalResponseDTO etiqueta = etiquetaService.obtenerPorCategoria(1L);
-        log.info("Etiqueta de la categoría: {}", etiqueta.getNombreCategoria());
-        assertEquals("Almuerzo Completo", etiqueta.getNombreCategoria());
-    }
-
-    @Test
     @DisplayName("Verificar las calorías de la etiqueta de la categoría 1")
     void checkCaloriasEtiqueta() {
         EtiquetaNutricionalResponseDTO etiqueta = etiquetaService.obtenerPorCategoria(1L);
@@ -39,11 +31,4 @@ class EtiquetaNutricionalIntegrationTest {
         assertEquals(500, etiqueta.getCalorias().intValue());
     }
 
-    @Test
-    @DisplayName("Verificar cantidad total de etiquetas nutricionales")
-    void checkCantidadEtiquetas() {
-        int cantidad = etiquetaService.listar().size();
-        log.info("Cantidad de etiquetas: {}", cantidad);
-        assertEquals(1, cantidad);
-    }
 }

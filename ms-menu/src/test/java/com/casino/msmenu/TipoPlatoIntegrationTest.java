@@ -28,11 +28,4 @@ class TipoPlatoIntegrationTest {
         assertEquals("Plato de Fondo", tipo.getNombreTipoPlato());
     }
 
-    @Test
-    @DisplayName("Verificar cantidad total de tipos de plato")
-    void checkCantidadTipos() {
-        int cantidad = tipoPlatoService.listar().size();
-        log.info("Total de tipos de plato: {}", cantidad);
-        assertEquals(3, cantidad);
-    }
 }

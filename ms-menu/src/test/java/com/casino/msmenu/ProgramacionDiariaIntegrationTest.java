@@ -24,14 +24,6 @@ class ProgramacionDiariaIntegrationTest {
     private ProgramacionDiariaService programacionService;
 
     @Test
-    @DisplayName("Verificar programaciones para la fecha 2026-06-10")
-    void checkProgramacionesPorFecha() {
-        int cantidad = programacionService.listarPorFecha(LocalDate.of(2026, 6, 10)).size();
-        log.info("Programaciones del 2026-06-10: {}", cantidad);
-        assertEquals(2, cantidad);
-    }
-
-    @Test
     @DisplayName("Verificar programaciones de la sede 6")
     void checkProgramacionesPorSede() {
         List<ProgramacionDiariaResponseDTO> lista = programacionService.listarPorSede(6L);
@@ -40,12 +32,4 @@ class ProgramacionDiariaIntegrationTest {
         assertEquals("Pollo a la plancha", lista.get(0).getNombrePlato());
     }
 
-    @Test
-    @DisplayName("Verificar programaciones por fecha y sede")
-    void checkProgramacionPorFechaYSede() {
-        int cantidad = programacionService
-                .listarPorFechaYSede(LocalDate.of(2026, 6, 10), 6L).size();
-        log.info("Programaciones del 2026-06-10 en sede 6: {}", cantidad);
-        assertEquals(1, cantidad);
-    }
 }

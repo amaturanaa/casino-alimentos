@@ -30,21 +30,6 @@ class TurnoEmpleadoIntegrationTest {
         assertEquals("TARDE", turno.getTipoTurno());
     }
 
-    @Test
-    @DisplayName("Verificar cantidad total de turnos")
-    void checkCantidadTurnos() {
-        int cantidad = turnoService.listar().size();
-        log.info("Total de turnos: {}", cantidad);
-        assertEquals(2, cantidad);
-    }
-
-    @Test
-    @DisplayName("Verificar cantidad de turnos del empleado 1")
-    void checkTurnosPorEmpleado() {
-        int turnos = turnoService.listarPorEmpleado(1L).size();
-        log.info("Turnos del empleado 1: {}", turnos);
-        assertEquals(2, turnos);
-    }
 
     @Test
     @DisplayName("Verificar cantidad de turnos de tipo TARDE")

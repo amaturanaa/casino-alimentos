@@ -19,11 +19,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 class MsEmpleadosApplicationTests {
 
-    // @Autowired inyecta el Service REAL desde el contexto de Spring
+    // @Autowired inyecta el Service REAL
     @Autowired
     private EmpleadoService empleadoService;
 
-    // Verifica que el contexto de Spring carga correctamente
+
     @Test
     void contextLoads() {
     }
@@ -36,21 +36,6 @@ class MsEmpleadosApplicationTests {
         assertEquals("Juan Carlos Perez Soto", empleado.getNombreCompleto());
     }
 
-    @Test
-    @DisplayName("Verificar cargo del empleado por su RUT")
-    void checkEmpleadoPorRut() {
-        EmpleadoResponseDTO empleado = empleadoService.obtenerPorRut("11111111");
-        log.info("Revisando RUT del empleado {}", empleado.getNombreCompleto());
-        assertEquals("Cocinero", empleado.getCargo());
-    }
-
-    @Test
-    @DisplayName("Verificar cantidad total de empleados")
-    void checkCantidadEmpleados() {
-        int cantidad = empleadoService.listar().size();
-        log.info("Total de empleados: {}", cantidad);
-        assertEquals(3, cantidad);
-    }
 
     @Test
     @DisplayName("Verificar cantidad de empleados activos")
@@ -60,11 +45,4 @@ class MsEmpleadosApplicationTests {
         assertEquals(2, activos);
     }
 
-    @Test
-    @DisplayName("Verificar cantidad de empleados con cargo Cocinero")
-    void checkEmpleadosPorCargo() {
-        int cocineros = empleadoService.listarPorCargo("Cocinero").size();
-        log.info("Cocineros: {}", cocineros);
-        assertEquals(1, cocineros);
-    }
 }

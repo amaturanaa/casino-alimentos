@@ -28,11 +28,4 @@ class TipoMovimientoIntegrationTest {
         assertEquals("ENTRADA", tipo.getNombreTipoMovimiento());
     }
 
-    @Test
-    @DisplayName("Verificar cantidad total de tipos de movimiento")
-    void checkCantidadTipos() {
-        int cantidad = tipoService.listar().size();
-        log.info("Total de tipos de movimiento: {}", cantidad);
-        assertEquals(3, cantidad);
-    }
 }

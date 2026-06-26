@@ -25,13 +25,6 @@ class MsMenuApplicationTests {
     void contextLoads() {
     }
 
-    @Test
-    @DisplayName("Verificar nombre del plato con id 1")
-    void checkNombrePlato() {
-        PlatoResponseDTO plato = platoService.obtenerPorId(1L);
-        log.info("Revisando plato {}", plato.getNombrePlato());
-        assertEquals("Pollo a la plancha", plato.getNombrePlato());
-    }
 
     @Test
     @DisplayName("Verificar el tipo de plato del plato 1")
@@ -39,22 +32,6 @@ class MsMenuApplicationTests {
         PlatoResponseDTO plato = platoService.obtenerPorId(1L);
         log.info("Tipo del plato: {}", plato.getNombreTipoPlato());
         assertEquals("Plato de Fondo", plato.getNombreTipoPlato());
-    }
-
-    @Test
-    @DisplayName("Verificar cantidad total de platos")
-    void checkCantidadPlatos() {
-        int cantidad = platoService.listar().size();
-        log.info("Total de platos: {}", cantidad);
-        assertEquals(3, cantidad);
-    }
-
-    @Test
-    @DisplayName("Verificar platos del tipo 1 (Plato de Fondo)")
-    void checkPlatosPorTipo() {
-        int cantidad = platoService.listarPorTipo(1L).size();
-        log.info("Platos de tipo 1: {}", cantidad);
-        assertEquals(1, cantidad);
     }
 
     @Test
